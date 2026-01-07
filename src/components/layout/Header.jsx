@@ -24,7 +24,7 @@ const Header = () => {
 
   const actionItems = [
     { name: "Contact", path: "#contact", icon: PhoneOutlined },
-    { name: "Login", path: "#login", icon: LoginOutlined, primary: true },
+    { name: "Login", path: "/auth", icon: LoginOutlined, primary: true },
   ];
 
   return (
@@ -50,8 +50,7 @@ const Header = () => {
                 <a
                   key={item.name}
                   href={item.path}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-                >
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
                   <Icon className="text-base" />
                   <span>{item.name}</span>
                 </a>
@@ -63,19 +62,24 @@ const Header = () => {
           <div className="hidden md:flex items-center gap-2 shrink-0">
             {actionItems.map((item) => {
               const Icon = item.icon;
+              const isExternalLink = item.path.startsWith("#");
+              const Component = isExternalLink ? "a" : Link;
+              const linkProps = isExternalLink
+                ? { href: item.path }
+                : { to: item.path };
+
               return (
-                <a
+                <Component
                   key={item.name}
-                  href={item.path}
+                  {...linkProps}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     item.primary
                       ? "bg-indigo-600 text-white hover:bg-indigo-700"
                       : "text-gray-600 hover:text-indigo-600 hover:bg-indigo-50"
-                  }`}
-                >
+                  }`}>
                   <Icon className="text-base" />
                   <span>{item.name}</span>
-                </a>
+                </Component>
               );
             })}
           </div>
@@ -84,8 +88,7 @@ const Header = () => {
           <button
             className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
+            aria-label="Toggle menu">
             {isMenuOpen ? (
               <CloseOutlined className="text-xl" />
             ) : (
@@ -99,12 +102,10 @@ const Header = () => {
       {isMenuOpen && (
         <div
           className="lg:hidden fixed inset-0 top-16 bg-black/30 backdrop-blur-sm z-40"
-          onClick={() => setIsMenuOpen(false)}
-        >
+          onClick={() => setIsMenuOpen(false)}>
           <div
             className="absolute top-0 right-0 w-72 max-w-[85vw] h-full bg-white shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+            onClick={(e) => e.stopPropagation()}>
             <div className="p-4 flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -113,8 +114,7 @@ const Header = () => {
                     key={item.name}
                     href={item.path}
                     className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                    onClick={() => setIsMenuOpen(false)}>
                     <Icon className="text-lg" />
                     <span>{item.name}</span>
                   </a>
@@ -123,20 +123,25 @@ const Header = () => {
               <div className="h-px bg-gray-200 my-2" />
               {actionItems.map((item) => {
                 const Icon = item.icon;
+                const isExternalLink = item.path.startsWith("#");
+                const Component = isExternalLink ? "a" : Link;
+                const linkProps = isExternalLink
+                  ? { href: item.path }
+                  : { to: item.path };
+
                 return (
-                  <a
+                  <Component
                     key={item.name}
-                    href={item.path}
+                    {...linkProps}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       item.primary
                         ? "bg-indigo-600 text-white"
                         : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                    onClick={() => setIsMenuOpen(false)}>
                     <Icon className="text-lg" />
                     <span>{item.name}</span>
-                  </a>
+                  </Component>
                 );
               })}
             </div>
