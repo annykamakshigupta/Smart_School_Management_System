@@ -47,7 +47,7 @@ const AuthPage = () => {
 
       <div className="relative w-full max-w-6xl">
         {/* Desktop View - Sliding Panel Animation */}
-        <div className="hidden md:block relative h-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="hidden md:block relative h-200 bg-white rounded-2xl shadow-2xl overflow-hidden">
           {/* Container for sliding panels */}
           <div className="relative h-full w-full">
             {/* Left Panel - Info Panel */}
@@ -70,6 +70,15 @@ const AuthPage = () => {
                 </div>
               </div>
 
+              {/* Shared illustration */}
+              <div className="mb-8">
+                <img
+                  src="https://thumbs.dreamstime.com/b/print-161837181.jpg"
+                  alt="School children playing"
+                  className="w-full h-96 object-cover rounded-2xl shadow-xl border border-white/20"
+                />
+              </div>
+
               {/* Content with crossfade */}
               <div className="relative">
                 {/* Login Panel Content */}
@@ -83,21 +92,17 @@ const AuthPage = () => {
                     pointerEvents: isLogin ? "auto" : "none",
                   }}>
                   <h2 className="text-4xl font-bold">Welcome Back!</h2>
-                  <p className="text-lg opacity-90">
-                    To keep connected with us please login with your personal
-                    info
-                  </p>
                   <button
                     onClick={() => handleToggle(false)}
                     disabled={isAnimating}
-                    className="mt-6 px-8 py-3 border-2 border-white text-white rounded-xl font-semibold transform transition-all duration-300 hover:bg-white hover:text-indigo-600 hover:scale-105 hover:shadow-xl active:scale-95 disabled:opacity-50">
+                    className="px-8 py-3 border-2 border-white text-white rounded-xl font-semibold transform transition-all duration-300 hover:bg-white hover:text-indigo-600 hover:scale-105 hover:shadow-xl active:scale-95 disabled:opacity-50">
                     Sign Up
                   </button>
                 </div>
 
                 {/* Signup Panel Content */}
                 <div
-                  className="space-y-6"
+
                   style={{
                     opacity: !isLogin ? 1 : 0,
                     transform: !isLogin ? "translateY(0)" : "translateY(-20px)",
@@ -118,38 +123,6 @@ const AuthPage = () => {
                 </div>
               </div>
 
-              <div className="mt-12 space-y-4">
-                {[
-                  {
-                    icon: "🎓",
-                    title: "AI-Powered System",
-                    desc: "Smart analytics and insights",
-                  },
-                  {
-                    icon: "🔒",
-                    title: "Secure & Reliable",
-                    desc: "Your data is safe with us",
-                  },
-                  {
-                    icon: "📊",
-                    title: "Complete Management",
-                    desc: "All-in-one solution",
-                  },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-start gap-3 transform transition-all duration-300 hover:translate-x-2"
-                    style={getFieldDelay(idx)}>
-                    <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mt-1 transform transition-all duration-300 hover:scale-110 hover:bg-opacity-30">
-                      <span className="text-lg">{item.icon}</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold">{item.title}</div>
-                      <div className="text-sm opacity-80">{item.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Right Panel - Login Form */}
@@ -317,9 +290,8 @@ const AuthPage = () => {
                   Create Account
                 </h2>
                 <p className="text-gray-600 mb-8">
-                  Join SSMS and start your journey today
+                  Create your SSMS account to manage student, parent and teacher access.
                 </p>
-
 
                 <Form
                   form={signupForm}
@@ -327,111 +299,107 @@ const AuthPage = () => {
                   layout="vertical"
                   requiredMark={false}>
                   <div className="space-y-4">
-                    {[
-                      {
-                        name: "name",
-                        icon: UserOutlined,
-                        placeholder: "Full Name",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your full name",
+                    <Form.Item
+                      name="name"
+                      rules={[{ required: true, message: "Please enter your full name" }]}
+                      style={getFieldDelay(2)}>
+                      <Input
+                        prefix={<UserOutlined className="text-gray-400" />}
+                        placeholder="Full Name"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="role"
+                      label="Account Type"
+                      rules={[{ required: true, message: "Please select your account type" }]}
+                      style={getFieldDelay(3)}>
+                      <select
+                        className="w-full rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-indigo-600 py-3 px-4 text-base text-gray-700 bg-white shadow-sm transition-all duration-300"
+                        defaultValue="">
+                        <option value="" disabled>
+                          Continue as Student, Parent or Teacher
+                        </option>
+                        <option value="student">Student</option>
+                        <option value="parent">Parent</option>
+                        <option value="teacher">Teacher</option>
+                      </select>
+                    </Form.Item>
+
+                    <div
+                      className="text-xs text-gray-500 mb-2 pl-1"
+                      style={getFieldDelay(3.5)}>
+                      Admin accounts are created internally.
+                    </div>
+
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        { required: true, message: "Please enter your email" },
+                        { type: "email", message: "Please enter a valid email" },
+                      ]}
+                      style={getFieldDelay(4)}>
+                      <Input
+                        prefix={<MailOutlined className="text-gray-400" />}
+                        placeholder="Email Address"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="phone"
+                      rules={[{ required: true, message: "Please enter your mobile number" }]}
+                      style={getFieldDelay(5)}>
+                      <Input
+                        prefix={<PhoneOutlined className="text-gray-400" />}
+                        placeholder="Mobile Number"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="password"
+                      rules={[
+                        { required: true, message: "Please enter your password" },
+                        { min: 8, message: "Password must be at least 8 characters" },
+                      ]}
+                      style={getFieldDelay(6)}>
+                      <Input.Password
+                        prefix={<LockOutlined className="text-gray-400" />}
+                        placeholder="Password"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="confirmPassword"
+                      dependencies={["password"]}
+                      rules={[
+                        { required: true, message: "Please confirm your password" },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(new Error("Passwords do not match"));
                           },
-                        ],
-                      },
-                      {
-                        name: "email",
-                        icon: MailOutlined,
-                        placeholder: "Email Address",
-                        type: "email",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your email",
-                          },
-                          {
-                            type: "email",
-                            message: "Please enter a valid email",
-                          },
-                        ],
-                      },
-                      {
-                        name: "phone",
-                        icon: PhoneOutlined,
-                        placeholder: "Phone Number",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your phone number",
-                          },
-                        ],
-                      },
-                      {
-                        name: "password",
-                        icon: LockOutlined,
-                        placeholder: "Password",
-                        type: "password",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your password",
-                          },
-                          {
-                            min: 8,
-                            message: "Password must be at least 8 characters",
-                          },
-                        ],
-                      },
-                    ].map((field, idx) => (
-                      <Form.Item
-                        key={field.name}
-                        name={field.name}
-                        rules={field.rules}
-                        style={getFieldDelay(idx + 2)}>
-                        {field.type === "password" ? (
-                          <Input.Password
-                            prefix={<field.icon className="text-gray-400" />}
-                            placeholder={field.placeholder}
-                            size="large"
-                            className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                          />
-                        ) : (
-                          <Input
-                            prefix={<field.icon className="text-gray-400" />}
-                            placeholder={field.placeholder}
-                            size="large"
-                            className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                          />
-                        )}
-                      </Form.Item>
-                    ))}
+                        }),
+                      ]}
+                      style={getFieldDelay(7)}>
+                      <Input.Password
+                        prefix={<LockOutlined className="text-gray-400" />}
+                        placeholder="Confirm Password"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      />
+                    </Form.Item>
                   </div>
-
-                  <Form.Item
-                    name="terms"
-                    valuePropName="checked"
-                    rules={[
-                      {
-                        validator: (_, value) =>
-                          value
-                            ? Promise.resolve()
-                            : Promise.reject(
-                                new Error("Please accept terms and conditions")
-                              ),
-                      },
-                    ]}
-                    style={getFieldDelay(6)}>
-                    <Checkbox className="transform transition-all duration-200 hover:scale-105">
-                      I agree to the{" "}
-                      <Link
-                        to="/terms"
-                        className="text-indigo-600 hover:text-indigo-700">
-                        Terms and Conditions
-                      </Link>
-                    </Checkbox>
-                  </Form.Item>
-
-                  <Form.Item style={getFieldDelay(7)}>
+                  <Form.Item style={getFieldDelay(9)}>
                     <Button
                       type="primary"
                       htmlType="submit"
@@ -663,6 +631,31 @@ const AuthPage = () => {
                     </Form.Item>
 
                     <Form.Item
+                      name="role"
+                      label="Account Type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select your account type",
+                        },
+                      ]}>
+                      <select
+                        className="w-full rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-indigo-600 py-3 px-4 text-base text-gray-700 bg-white shadow-sm transition-all duration-300"
+                        defaultValue="">
+                        <option value="" disabled>
+                          Continue as Student, Parent or Teacher
+                        </option>
+                        <option value="student">Student</option>
+                        <option value="parent">Parent</option>
+                        <option value="teacher">Teacher</option>
+                      </select>
+                    </Form.Item>
+
+                    <div className="text-xs text-gray-500 mb-2 pl-1">
+                      Admin accounts are created internally.
+                    </div>
+
+                    <Form.Item
                       name="email"
                       rules={[
                         { required: true, message: "Please enter your email" },
@@ -684,12 +677,12 @@ const AuthPage = () => {
                       rules={[
                         {
                           required: true,
-                          message: "Please enter your phone number",
+                          message: "Please enter your mobile number",
                         },
                       ]}>
                       <Input
                         prefix={<PhoneOutlined className="text-gray-400" />}
-                        placeholder="Phone Number"
+                        placeholder="Mobile Number"
                         size="large"
                         className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
                       />
@@ -710,6 +703,28 @@ const AuthPage = () => {
                       <Input.Password
                         prefix={<LockOutlined className="text-gray-400" />}
                         placeholder="Password"
+                        size="large"
+                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="confirmPassword"
+                      dependencies={["password"]}
+                      rules={[
+                        { required: true, message: "Please confirm your password" },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(new Error("Passwords do not match"));
+                          },
+                        }),
+                      ]}>
+                      <Input.Password
+                        prefix={<LockOutlined className="text-gray-400" />}
+                        placeholder="Confirm Password"
                         size="large"
                         className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
                       />
