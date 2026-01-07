@@ -5,7 +5,7 @@ import AboutSection from "../components/sections/AboutSection";
 import ProblemsSection from "../components/sections/ProblemsSection";
 import FeaturesSection from "../components/sections/FeaturesSection";
 import UserRolesSection from "../components/sections/UserRolesSection";
-import WorkflowSection from "../components/sections/WorkflowSection";
+
 
 const LandingPage = () => {
   return (
@@ -17,7 +17,6 @@ const LandingPage = () => {
         <ProblemsSection />
         <FeaturesSection />
         <UserRolesSection />
-        <WorkflowSection />
       </main>
       <Footer />
     </div>
