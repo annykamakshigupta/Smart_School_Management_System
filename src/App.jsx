@@ -27,6 +27,9 @@ import {
   StudentsPage,
   ParentsPage,
   SettingsPage as AdminSettingsPage,
+  SchedulesPage,
+  ClassesPage,
+  SubjectsPage,
 } from "./features/admin";
 
 // Feature Pages - Teacher
@@ -34,6 +37,7 @@ import {
   TeacherDashboard,
   AttendancePage as TeacherAttendancePage,
   MyStudentsPage,
+  MySchedulePage,
 } from "./features/teacher";
 
 // Feature Pages - Student
@@ -125,15 +129,15 @@ function App() {
                   {/* Academics */}
                   <Route
                     path="/admin/academics/classes"
-                    element={<PlaceholderPage title="Classes Management" />}
+                    element={<ClassesPage />}
                   />
                   <Route
                     path="/admin/academics/subjects"
-                    element={<PlaceholderPage title="Subjects Management" />}
+                    element={<SubjectsPage />}
                   />
                   <Route
                     path="/admin/academics/timetable"
-                    element={<PlaceholderPage title="Timetable Management" />}
+                    element={<SchedulesPage />}
                   />
 
                   {/* Fee Management */}
@@ -209,7 +213,7 @@ function App() {
                   />
                   <Route
                     path="/teacher/schedule"
-                    element={<PlaceholderPage title="My Schedule" />}
+                    element={<MySchedulePage />}
                   />
                   <Route
                     path="/teacher/communication"

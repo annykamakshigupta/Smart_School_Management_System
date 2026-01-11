@@ -9,3 +9,6 @@ export { default as TeachersPage } from "./pages/TeachersPage";
 export { default as StudentsPage } from "./pages/StudentsPage";
 export { default as ParentsPage } from "./pages/ParentsPage";
 export { default as SettingsPage } from "./pages/SettingsPage";
+export { default as SchedulesPage } from "./pages/SchedulesPage";
+export { default as ClassesPage } from "./pages/ClassesPage";
+export { default as SubjectsPage } from "./pages/SubjectsPage";

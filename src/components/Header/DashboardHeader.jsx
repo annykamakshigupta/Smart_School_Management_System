@@ -90,7 +90,6 @@ const DashboardHeader = ({
     },
   ];
 
-
   // Get user initials for avatar
   const getUserInitials = (name) => {
     if (!name) return "U";
@@ -238,7 +237,7 @@ const DashboardHeader = ({
               menu={{ items: userMenuItems }}
               trigger={["click"]}
               placement="bottomRight"
-              dropdownRender={(menu) => (
+              popupRender={(menu) => (
                 <div
                   className="
                     bg-white rounded-xl shadow-xl shadow-gray-300/50
@@ -341,7 +340,7 @@ const DashboardHeader = ({
       )}
 
       {/* Custom Animations & Styles */}
-      <style jsx>{`
+      <style>{`
         @keyframes slideDown {
           from {
             opacity: 0;
