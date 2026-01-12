@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/classes";
+const API_URL = "https://smart-school-backend-4ce1.onrender.com/api/classes";
 
 // Helper to get auth headers
 const getAuthHeaders = () => {

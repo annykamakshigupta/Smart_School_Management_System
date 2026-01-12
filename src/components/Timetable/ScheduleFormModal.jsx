@@ -52,24 +52,27 @@ const ScheduleFormModal = ({
     try {
       // Fetch all data in parallel
       const [classesRes, subjectsRes, teachersRes] = await Promise.all([
-        fetch("http://localhost:8080/api/classes", {
+        fetch("https://smart-school-backend-4ce1.onrender.com/api/classes", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }),
-        fetch("http://localhost:8080/api/subjects", {
+        fetch("https://smart-school-backend-4ce1.onrender.com/api/subjects", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }),
-        fetch("http://localhost:8080/api/users?role=teacher", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }),
+        fetch(
+          "https://smart-school-backend-4ce1.onrender.com/api/users?role=teacher",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        ),
       ]);
 
       if (classesRes.ok) {
@@ -385,7 +388,9 @@ const ScheduleFormModal = ({
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Submit</button>
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Submit
+            </button>
           </div>
         </form>
       </div>

@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://smart-school-backend-4ce1.onrender.com/api";
 
 // Token storage key (same as auth.service.js)
 const TOKEN_KEY = "ssms_token";
