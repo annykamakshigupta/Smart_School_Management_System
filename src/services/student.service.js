@@ -1,0 +1,102 @@
+import axios from "axios";
+import BASE_URL from "../config/baseUrl";
+
+const API_URL = `${BASE_URL}`;
+
+// Helper to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("ssms_token");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+};
+
+/**
+ * Get current student's profile with class and parent info
+ * Fetches data based on logged-in user's ID
+ */
+export const getMyStudentProfile = async () => {
+  try {
+    // Get current user ID from stored user data
+    const userData = localStorage.getItem("ssms_user");
+    if (!userData) {
+      throw new Error("User not authenticated");
+    }
+    const user = JSON.parse(userData);
+
+    const response = await axios.get(
+      `${API_URL}/admin/students/user/${user.id}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error fetching student profile"
+    );
+  }
+};
+
+/**
+ * Get student's class subjects
+ */
+export const getMySubjects = async (classId) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/subjects?classId=${classId}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error fetching subjects");
+  }
+};
+
+/**
+ * Get student's attendance
+ */
+export const getMyAttendance = async (filters = {}) => {
+  try {
+    const params = new URLSearchParams();
+    if (filters.startDate) params.append("startDate", filters.startDate);
+    if (filters.endDate) params.append("endDate", filters.endDate);
+    if (filters.classId) params.append("classId", filters.classId);
+
+    const url = params.toString()
+      ? `${API_URL}/attendance/my?${params}`
+      : `${API_URL}/attendance/my`;
+
+    const response = await axios.get(url, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error fetching attendance"
+    );
+  }
+};
+
+/**
+ * Get student's timetable/schedule
+ */
+export const getMyTimetable = async (classId) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/schedules?classId=${classId}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error fetching timetable"
+    );
+  }
+};
+
+export default {
+  getMyStudentProfile,
+  getMySubjects,
+  getMyAttendance,
+  getMyTimetable,
+};

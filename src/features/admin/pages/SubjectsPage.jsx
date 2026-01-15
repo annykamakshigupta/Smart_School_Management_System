@@ -32,6 +32,9 @@ const SubjectsPage = () => {
     setLoading(true);
     try {
       const response = await subjectService.getAllSubjects();
+      console.log("📦 API Response:", response);
+      console.log("📊 Subjects count:", response.count);
+      console.log("📋 Subjects data:", response.data);
       setSubjects(response.data || []);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -204,7 +207,9 @@ const SubjectsPage = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {subjects.map((subject) => (
-                  <tr key={subject._id} className="hover:bg-gray-50">
+                  <tr
+                    key={subject._id || Math.random()}
+                    className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {subject.name}
                     </td>

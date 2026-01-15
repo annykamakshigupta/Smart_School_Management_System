@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   Card,
+  Button,
   Progress,
   List,
   Avatar,
@@ -22,10 +23,12 @@ import {
   ClockCircleOutlined,
   BookOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StatCard, PageHeader } from "../../../components/UI";
 
 const TeacherDashboard = () => {
+  const navigate = useNavigate();
+
   // Mock data
   const stats = {
     totalStudents: 156,
@@ -144,6 +147,15 @@ const TeacherDashboard = () => {
       <PageHeader
         title="Dashboard"
         subtitle="Welcome back! Here's your schedule and tasks for today."
+        action={
+          <Button
+            type="primary"
+            icon={<CheckCircleOutlined />}
+            size="large"
+            onClick={() => navigate("/teacher/attendance?mark=1")}>
+            Mark Attendance
+          </Button>
+        }
       />
 
       {/* Stats */}
@@ -320,7 +332,7 @@ const TeacherDashboard = () => {
         <Col xs={24}>
           <Card title="Quick Actions">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <Link to="/teacher/attendance/mark">
+              <Link to="/teacher/attendance?mark=1">
                 <div className="p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-colors cursor-pointer">
                   <CheckCircleOutlined className="text-2xl text-blue-600 mb-2" />
                   <div className="text-sm font-medium text-gray-900">

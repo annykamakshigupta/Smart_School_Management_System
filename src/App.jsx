@@ -31,6 +31,10 @@ import {
   ClassesPage,
   SubjectsPage,
   AdminAttendancePage,
+  UserManagementPage,
+  StudentEnrollmentPage,
+  ParentChildMappingPage,
+  ClassSubjectAssignmentPage,
 } from "./features/admin";
 
 // Feature Pages - Teacher
@@ -114,7 +118,8 @@ function App() {
                 <Route element={<DashboardLayout />}>
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-                  {/* User Management */}
+                  {/* User Management Module */}
+                  <Route path="/admin/users" element={<UserManagementPage />} />
                   <Route
                     path="/admin/users/teachers"
                     element={<TeachersPage />}
@@ -126,6 +131,18 @@ function App() {
                   <Route
                     path="/admin/users/parents"
                     element={<ParentsPage />}
+                  />
+                  <Route
+                    path="/admin/students/enroll"
+                    element={<StudentEnrollmentPage />}
+                  />
+                  <Route
+                    path="/admin/parents/mapping"
+                    element={<ParentChildMappingPage />}
+                  />
+                  <Route
+                    path="/admin/assignments"
+                    element={<ClassSubjectAssignmentPage />}
                   />
 
                   {/* Academics */}

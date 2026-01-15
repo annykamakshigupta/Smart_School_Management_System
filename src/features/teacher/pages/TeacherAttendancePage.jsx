@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import { Card, Button, message, Empty } from "antd";
 import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
+import { useSearchParams } from "react-router-dom";
 import PageHeader from "../../../components/UI/PageHeader";
 import {
   AttendanceTable,
@@ -15,10 +16,18 @@ import {
 import { getAttendanceByClass } from "../../../services/attendance.service";
 
 const TeacherAttendancePage = () => {
+  const [searchParams] = useSearchParams();
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMarkForm, setShowMarkForm] = useState(false);
   const [filters, setFilters] = useState({});
+
+  useEffect(() => {
+    const mark = searchParams.get("mark");
+    if (mark === "1" || mark === "true") {
+      setShowMarkForm(true);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (Object.keys(filters).length > 0) {

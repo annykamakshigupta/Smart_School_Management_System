@@ -32,11 +32,19 @@ export const getAllSubjects = async (filters = {}) => {
       params.append("academicYear", filters.academicYear);
     if (filters.classId) params.append("classId", filters.classId);
     if (filters.teacherId) params.append("teacherId", filters.teacherId);
+    if (filters.showAll !== undefined)
+      params.append("showAll", filters.showAll);
+    if (filters.isActive !== undefined)
+      params.append("isActive", filters.isActive);
 
     const url = params.toString() ? `${API_URL}?${params}` : API_URL;
     const response = await axios.get(url, getAuthHeaders());
+
+    console.log("📡 Frontend received:", response.data);
+
     return response.data;
   } catch (error) {
+    console.error("❌ Frontend API error:", error);
     throw new Error(error.response?.data?.message || "Error fetching subjects");
   }
 };

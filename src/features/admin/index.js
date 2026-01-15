@@ -13,3 +13,9 @@ export { default as SchedulesPage } from "./pages/SchedulesPage";
 export { default as ClassesPage } from "./pages/ClassesPage";
 export { default as SubjectsPage } from "./pages/SubjectsPage";
 export { default as AdminAttendancePage } from "./pages/AdminAttendancePage";
+
+// User Management Module
+export { default as UserManagementPage } from "./pages/UserManagementPage";
+export { default as StudentEnrollmentPage } from "./pages/StudentEnrollmentPage";
+export { default as ParentChildMappingPage } from "./pages/ParentChildMappingPage";
+export { default as ClassSubjectAssignmentPage } from "./pages/ClassSubjectAssignmentPage";

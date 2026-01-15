@@ -35,28 +35,92 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
-        { key: "users", label: "User Management", path: "/admin/users", icon: Users },
+        {
+          key: "dashboard",
+          label: "Dashboard",
+          path: "/admin/dashboard",
+          icon: LayoutDashboard,
+        },
+        {
+          key: "users",
+          label: "User Management",
+          path: "/admin/users",
+          icon: Users,
+        },
+        {
+          key: "attendance",
+          label: "Attendance",
+          path: "/admin/attendance",
+          icon: ClipboardCheck,
+        },
+      ],
+    },
+    {
+      section: "Enrollment",
+      items: [
+        {
+          key: "student-enroll",
+          label: "Student Enrollment",
+          path: "/admin/students/enroll",
+          icon: GraduationCap,
+        },
+        {
+          key: "parent-mapping",
+          label: "Parent-Child Mapping",
+          path: "/admin/parents/mapping",
+          icon: Users,
+        },
+        {
+          key: "assignments",
+          label: "Teacher Assignments",
+          path: "/admin/assignments",
+          icon: UserCircle,
+        },
       ],
     },
     {
       section: "Academics",
       items: [
-        { key: "classes", label: "Classes", path: "/admin/academics/classes", icon: BookOpen },
-        { key: "subjects", label: "Subjects", path: "/admin/academics/subjects", icon: Book },
-        { key: "fees", label: "Fees & Finance", path: "/admin/fees", icon: DollarSign },
+        {
+          key: "classes",
+          label: "Classes",
+          path: "/admin/academics/classes",
+          icon: BookOpen,
+        },
+        {
+          key: "subjects",
+          label: "Subjects",
+          path: "/admin/academics/subjects",
+          icon: Book,
+        },
+        {
+          key: "fees",
+          label: "Fees & Finance",
+          path: "/admin/fees",
+          icon: DollarSign,
+        },
       ],
     },
     {
       section: "Analytics",
       items: [
-        { key: "reports", label: "Reports & Analytics", path: "/admin/reports", icon: BarChart3 },
+        {
+          key: "reports",
+          label: "Reports & Analytics",
+          path: "/admin/reports",
+          icon: BarChart3,
+        },
       ],
     },
     {
       section: "Settings",
       items: [
-        { key: "settings", label: "System Settings", path: "/admin/settings", icon: Settings },
+        {
+          key: "settings",
+          label: "System Settings",
+          path: "/admin/settings",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -64,21 +128,53 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/teacher/dashboard", icon: LayoutDashboard },
-        { key: "attendance", label: "Attendance", path: "/teacher/attendance", icon: ClipboardCheck },
+        {
+          key: "dashboard",
+          label: "Dashboard",
+          path: "/teacher/dashboard",
+          icon: LayoutDashboard,
+        },
+        {
+          key: "mark-attendance",
+          label: "Mark Attendance",
+          path: "/teacher/attendance?mark=1",
+          icon: ClipboardCheck,
+        },
+        {
+          key: "attendance",
+          label: "Attendance",
+          path: "/teacher/attendance",
+          icon: ClipboardCheck,
+        },
+        
       ],
     },
     {
       section: "Academics",
       items: [
-        { key: "assignments", label: "Assignments", path: "/teacher/assignments", icon: FileText },
-        { key: "performance", label: "Student Performance", path: "/teacher/performance", icon: TrendingUp },
+        {
+          key: "assignments",
+          label: "Assignments",
+          path: "/teacher/assignments",
+          icon: FileText,
+        },
+        {
+          key: "performance",
+          label: "Student Performance",
+          path: "/teacher/performance",
+          icon: TrendingUp,
+        },
       ],
     },
     {
       section: "Communication",
       items: [
-        { key: "messages", label: "Messages", path: "/teacher/messages", icon: MessageSquare },
+        {
+          key: "messages",
+          label: "Messages",
+          path: "/teacher/messages",
+          icon: MessageSquare,
+        },
       ],
     },
   ],
@@ -86,16 +182,41 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/student/dashboard", icon: LayoutDashboard },
-        { key: "classes", label: "My Classes", path: "/student/classes", icon: BookOpen },
+        {
+          key: "dashboard",
+          label: "Dashboard",
+          path: "/student/dashboard",
+          icon: LayoutDashboard,
+        },
+        {
+          key: "classes",
+          label: "My Classes",
+          path: "/student/classes",
+          icon: BookOpen,
+        },
       ],
     },
     {
       section: "Academics",
       items: [
-        { key: "attendance", label: "Attendance", path: "/student/attendance", icon: ClipboardCheck },
-        { key: "results", label: "Results", path: "/student/results", icon: Award },
-        { key: "timetable", label: "Timetable", path: "/student/timetable", icon: Calendar },
+        {
+          key: "attendance",
+          label: "Attendance",
+          path: "/student/attendance",
+          icon: ClipboardCheck,
+        },
+        {
+          key: "results",
+          label: "Results",
+          path: "/student/results",
+          icon: Award,
+        },
+        {
+          key: "timetable",
+          label: "Timetable",
+          path: "/student/timetable",
+          icon: Calendar,
+        },
       ],
     },
   ],
@@ -103,21 +224,41 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/parent/dashboard", icon: LayoutDashboard },
-        { key: "child", label: "Child Overview", path: "/parent/child", icon: UserCircle },
+        {
+          key: "dashboard",
+          label: "Dashboard",
+          path: "/parent/dashboard",
+          icon: LayoutDashboard,
+        },
+        {
+          key: "child",
+          label: "Child Overview",
+          path: "/parent/child",
+          icon: UserCircle,
+        },
       ],
     },
     {
       section: "Academics",
       items: [
-        { key: "attendance", label: "Attendance", path: "/parent/attendance", icon: ClipboardCheck },
+        {
+          key: "attendance",
+          label: "Attendance",
+          path: "/parent/attendance",
+          icon: ClipboardCheck,
+        },
         { key: "fees", label: "Fees", path: "/parent/fees", icon: CreditCard },
       ],
     },
     {
       section: "Communication",
       items: [
-        { key: "messages", label: "Messages", path: "/parent/messages", icon: MessageSquare },
+        {
+          key: "messages",
+          label: "Messages",
+          path: "/parent/messages",
+          icon: MessageSquare,
+        },
       ],
     },
   ],
@@ -161,17 +302,12 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
       style={{
         "--accent-color": accentColor,
         "--accent-rgb": accentRgb,
-      }}
-    >
+      }}>
       <div
         className={`
           flex items-center gap-3 px-3 py-2.5 rounded-xl
           transition-all duration-300 ease-out
-          ${
-            isActive
-              ? "bg-linear-to-r shadow-sm"
-              : "hover:bg-gray-50/80"
-          }
+          ${isActive ? "bg-linear-to-r shadow-sm" : "hover:bg-gray-50/80"}
         `}
         style={
           isActive
@@ -180,8 +316,7 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
                 borderLeft: `3px solid var(--accent-color)`,
               }
             : {}
-        }
-      >
+        }>
         {/* Active Indicator */}
         {isActive && (
           <div
@@ -196,8 +331,7 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
             flex items-center justify-center shrink-0 transition-all duration-300
             ${collapsed ? "mx-auto" : ""}
             ${isActive ? "" : "group-hover:scale-110"}
-          `}
-        >
+          `}>
           <Icon
             size={20}
             strokeWidth={2}
@@ -213,10 +347,13 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
           <span
             className={`
               text-sm font-medium transition-colors duration-300
-              ${isActive ? "font-semibold" : "text-gray-600 group-hover:text-gray-900"}
+              ${
+                isActive
+                  ? "font-semibold"
+                  : "text-gray-600 group-hover:text-gray-900"
+              }
             `}
-            style={isActive ? { color: accentColor } : {}}
-          >
+            style={isActive ? { color: accentColor } : {}}>
             {item.label}
           </span>
         )}
@@ -241,7 +378,13 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
 /**
  * Navigation Section Component
  */
-const NavSection = ({ section, collapsed, accentColor, accentRgb, onNavigate }) => {
+const NavSection = ({
+  section,
+  collapsed,
+  accentColor,
+  accentRgb,
+  onNavigate,
+}) => {
   return (
     <div className="space-y-1">
       {/* Section Header */}
@@ -310,22 +453,19 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
         style={{
           backdropFilter: "blur(10px)",
           background: "linear-gradient(to bottom, #ffffff 0%, #fafafa 100%)",
-        }}
-      >
+        }}>
         {/* Logo Section */}
         <div
           className={`
             flex items-center h-16 px-4 border-b border-gray-200/80
             transition-all duration-500
             ${collapsed ? "justify-center px-0" : "gap-3"}
-          `}
-        >
+          `}>
           <div
             className="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl shadow-sm transition-all duration-300 hover:scale-105"
             style={{
               background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-            }}
-          >
+            }}>
             <GraduationCap size={22} strokeWidth={2.5} className="text-white" />
           </div>
 
@@ -362,8 +502,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
             style={{
               background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
             }}
-            title="View Schedule"
-          >
+            title="View Schedule">
             <Calendar size={20} strokeWidth={2.5} />
             {!collapsed && <span>Schedule</span>}
           </button>
@@ -375,8 +514,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
             px-4 py-4 border-t border-gray-200/80
             transition-all duration-500
             ${collapsed ? "text-center px-2" : ""}
-          `}
-        >
+          `}>
           <div className="text-xs text-gray-400 font-medium">
             {collapsed ? "©" : "© 2026 SSMS"}
           </div>
@@ -401,8 +539,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
         `}
         style={{
           background: "linear-gradient(to bottom, #ffffff 0%, #fafafa 100%)",
-        }}
-      >
+        }}>
         {/* Mobile Header */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200/80">
           <div className="flex items-center gap-3">
@@ -410,9 +547,12 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
               className="flex items-center justify-center w-10 h-10 rounded-xl shadow-sm"
               style={{
                 background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-              }}
-            >
-              <GraduationCap size={22} strokeWidth={2.5} className="text-white" />
+              }}>
+              <GraduationCap
+                size={22}
+                strokeWidth={2.5}
+                className="text-white"
+              />
             </div>
             <div>
               <div className="text-lg font-bold text-gray-900 tracking-tight">
@@ -427,8 +567,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 active:scale-95"
-            aria-label="Close menu"
-          >
+            aria-label="Close menu">
             <X size={20} strokeWidth={2} />
           </button>
         </div>
@@ -454,8 +593,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
             style={{
               background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-            }}
-          >
+            }}>
             <Calendar size={20} strokeWidth={2.5} />
             <span>Schedule</span>
           </button>
