@@ -35,7 +35,7 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+        { key: "dashboard", label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
         { key: "users", label: "User Management", path: "/admin/users", icon: Users },
       ],
     },
@@ -103,7 +103,7 @@ const NAVIGATION_CONFIG = {
     {
       section: "Main",
       items: [
-        { key: "dashboard", label: "Dashboard", path: "/parent", icon: LayoutDashboard },
+        { key: "dashboard", label: "Dashboard", path: "/parent/dashboard", icon: LayoutDashboard },
         { key: "child", label: "Child Overview", path: "/parent/child", icon: UserCircle },
       ],
     },
