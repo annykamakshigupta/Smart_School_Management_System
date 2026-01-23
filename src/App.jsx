@@ -43,6 +43,7 @@ import {
   AttendancePage as TeacherAttendancePage,
   MyStudentsPage,
   MySchedulePage,
+  TeacherAssignmentsPage,
 } from "./features/teacher";
 
 // Feature Pages - Student
@@ -50,6 +51,7 @@ import {
   StudentDashboard,
   StudentAttendancePage,
   TimetablePage,
+  StudentAssignmentsPage,
 } from "./features/student";
 
 // Feature Pages - Parent
@@ -208,11 +210,10 @@ function App() {
                     path="/teacher/attendance"
                     element={<TeacherAttendancePage />}
                   />
-
                   {/* Grades */}
                   <Route
-                    path="/teacher/grades/assignments"
-                    element={<PlaceholderPage title="Assignments" />}
+                    path="/teacher/assignments"
+                    element={<TeacherAssignmentsPage />}
                   />
                   <Route
                     path="/teacher/grades/enter"
@@ -273,8 +274,8 @@ function App() {
                     element={<PlaceholderPage title="My Grades" />}
                   />
                   <Route
-                    path="/student/academics/assignments"
-                    element={<PlaceholderPage title="Assignments" />}
+                    path="/student/assignments"
+                    element={<StudentAssignmentsPage />}
                   />
                   <Route
                     path="/student/academics/results"

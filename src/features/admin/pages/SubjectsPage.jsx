@@ -218,7 +218,8 @@ const SubjectsPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {subject.assignedTeacher
-                        ? `${subject.assignedTeacher.firstName || ""} ${subject.assignedTeacher.lastName || ""}`.trim()
+                        ? subject.assignedTeacher.name ||
+                          `${subject.assignedTeacher.firstName || ""} ${subject.assignedTeacher.lastName || ""}`.trim()
                         : "Not Assigned"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

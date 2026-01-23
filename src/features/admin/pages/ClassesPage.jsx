@@ -199,10 +199,7 @@ const ClassesPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {classItem.classTeacher
-                        ? classItem.classTeacher.firstName &&
-                          classItem.classTeacher.lastName
-                          ? `${classItem.classTeacher.firstName} ${classItem.classTeacher.lastName}`
-                          : classItem.classTeacher.email || "Not Assigned"
+                        ? classItem.classTeacher.name || "Not Assigned"
                         : "Not Assigned"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
