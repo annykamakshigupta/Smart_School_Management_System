@@ -45,7 +45,7 @@ export const parseToken = (token) => {
       atob(base64)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch (error) {
@@ -150,12 +150,19 @@ export const loginUser = async (credentials) => {
           error: "Invalid user role",
         };
       }
+
+      // Merge roleProfile into user for easier access
+      const userWithProfile = data.roleProfile
+        ? { ...data.user, roleProfile: data.roleProfile }
+        : data.user;
+
       // Store auth data
-      setAuthData(data.token, data.user, data.refreshToken);
+      setAuthData(data.token, userWithProfile, data.refreshToken);
       return {
         success: true,
         data: {
-          user: data.user,
+          user: userWithProfile,
+          roleProfile: data.roleProfile,
           token: data.token,
           redirectTo: ROLE_ROUTES[role],
         },
@@ -212,7 +219,7 @@ export const logoutUser = async () => {
         {},
         {
           headers: getAuthHeaders(),
-        }
+        },
       );
     } catch (error) {
       // Continue with local logout even if server logout fails
@@ -238,7 +245,7 @@ export const refreshAuthToken = async () => {
       { refreshToken },
       {
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     const data = response.data;
     if (!data.token) {
@@ -259,7 +266,7 @@ export const refreshAuthToken = async () => {
 
 /**
  * Get current user profile from server
- * @returns {Promise<object>} - { success, user, error }
+ * @returns {Promise<object>} - { success, user, roleProfile, error }
  */
 export const getCurrentUser = async () => {
   const token = getToken();
@@ -271,9 +278,17 @@ export const getCurrentUser = async () => {
       headers: getAuthHeaders(),
     });
     const data = response.data;
+
+    // Handle new API response structure with user and roleProfile
+    const userData = data.user || data;
+    const roleProfile = data.roleProfile || null;
+
+    // Merge roleProfile data into user for backward compatibility
+    const mergedUser = roleProfile ? { ...userData, roleProfile } : userData;
+
     // Update stored user data
-    localStorage.setItem(USER_KEY, JSON.stringify(data.user || data));
-    return { success: true, user: data.user || data };
+    localStorage.setItem(USER_KEY, JSON.stringify(mergedUser));
+    return { success: true, user: mergedUser, roleProfile };
   } catch (error) {
     if (error.response && error.response.status === 401) {
       clearAuthData();

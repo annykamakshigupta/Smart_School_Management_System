@@ -35,12 +35,16 @@ import {
   getMyAttendance,
   getMyTimetable,
 } from "../../../services/student.service";
+import { getMyResults } from "../../../services/result.service";
+import { getMyFees } from "../../../services/fee.service";
 
 const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [studentProfile, setStudentProfile] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [attendanceLoading, setAttendanceLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [fees, setFees] = useState({ data: [], summary: {} });
 
   useEffect(() => {
     fetchStudentData();
@@ -52,8 +56,8 @@ const StudentDashboard = () => {
       const profileRes = await getMyStudentProfile();
       setStudentProfile(profileRes.data);
 
-      if (profileRes.data?.classId?._id) {
-        fetchAdditionalData(profileRes.data.classId._id);
+      if (profileRes.data?._id) {
+        fetchAdditionalData(profileRes.data._id, profileRes.data.classId?._id);
       }
     } catch (error) {
       console.error("Error fetching student data:", error);
@@ -63,20 +67,26 @@ const StudentDashboard = () => {
     }
   };
 
-  const fetchAdditionalData = async (classId) => {
+  const fetchAdditionalData = async (studentId, classId) => {
     setAttendanceLoading(true);
     try {
       const startDate = new Date();
       startDate.setDate(1);
       const endDate = new Date();
 
-      const attendanceRes = await getMyAttendance({
-        classId,
-        startDate: startDate.toISOString().split("T")[0],
-        endDate: endDate.toISOString().split("T")[0],
-      }).catch(() => ({ data: [] }));
+      // Fetch attendance, results, and fees in parallel
+      const [attendanceRes, resultsRes, feesRes] = await Promise.all([
+        getMyAttendance({
+          startDate: startDate.toISOString().split("T")[0],
+          endDate: endDate.toISOString().split("T")[0],
+        }).catch(() => ({ data: [] })),
+        getMyResults().catch(() => ({ data: [] })),
+        getMyFees().catch(() => ({ data: [], summary: {} })),
+      ]);
 
       setAttendance(attendanceRes.data || []);
+      setResults(resultsRes.data || []);
+      setFees(feesRes);
     } catch (error) {
       console.error("Error fetching additional data:", error);
     } finally {
@@ -202,17 +212,21 @@ const StudentDashboard = () => {
         </Col>
         <Col xs={12} sm={6}>
           <StatCard
-            title="Class"
-            value={`${classInfo?.name || "N/A"}`}
-            icon={TeamOutlined}
+            title="Avg Performance"
+            value={
+              results.length > 0
+                ? `${Math.round(results.reduce((sum, r) => sum + (r.percentage || 0), 0) / results.length)}%`
+                : "N/A"
+            }
+            icon={TrophyOutlined}
             iconColor="bg-purple-100 text-purple-600"
           />
         </Col>
         <Col xs={12} sm={6}>
           <StatCard
-            title="Section"
-            value={studentProfile.section || "N/A"}
-            icon={IdcardOutlined}
+            title="Pending Fees"
+            value={fees.summary?.totalBalance || 0}
+            icon={FileTextOutlined}
             iconColor="bg-yellow-100 text-yellow-600"
           />
         </Col>
@@ -237,22 +251,22 @@ const StudentDashboard = () => {
                   className="bg-indigo-100 text-indigo-600"
                 />
                 <div>
-                  <h4 className="font-semibold text-lg">{classTeacher.name}</h4>
+                  <h4 className="font-semibold text-lg">
+                    {classTeacher.userId?.name || classTeacher.name || "N/A"}
+                  </h4>
                   <div className="text-gray-500 text-sm flex items-center gap-1">
                     <MailOutlined />
-                    {classTeacher.email}
+                    {classTeacher.userId?.email || "N/A"}
                   </div>
-                  {classTeacher.phone && (
-                    <div className="text-gray-500 text-sm flex items-center gap-1">
-                      <PhoneOutlined />
-                      {classTeacher.phone}
-                    </div>
-                  )}
+                  <div className="text-gray-500 text-sm flex items-center gap-1">
+                    <PhoneOutlined />
+                    {classTeacher.userId?.phone || "N/A"}
+                  </div>
                 </div>
               </div>
             ) : (
               <Empty
-                description="No class teacher assigned yet"
+                description="No class teacher assigned"
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
             )}

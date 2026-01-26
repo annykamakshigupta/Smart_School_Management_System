@@ -15,26 +15,31 @@ const getAuthHeaders = () => {
 };
 
 /**
- * Get current user's ID from storage
+ * Get current parent's profile ID from storage
  */
-const getCurrentUserId = () => {
+const getParentProfileId = () => {
   const userData = localStorage.getItem("ssms_user");
   if (!userData) {
     throw new Error("User not authenticated");
   }
-  return JSON.parse(userData).id;
+  const user = JSON.parse(userData);
+  // roleProfile contains the parent profile data with _id
+  if (user.roleProfile && user.roleProfile._id) {
+    return user.roleProfile._id;
+  }
+  throw new Error("Parent profile not found");
 };
 
 /**
  * Get current parent's children
- * Auto-fetches based on logged-in parent's ID
+ * Auto-fetches based on logged-in parent's profile ID
  */
 export const getMyChildren = async () => {
   try {
-    const userId = getCurrentUserId();
+    const parentId = getParentProfileId();
     const response = await axios.get(
-      `${API_URL}/admin/parents/${userId}/children`,
-      getAuthHeaders()
+      `${API_URL}/admin/parents/${parentId}/children`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -54,12 +59,12 @@ export const getChildAttendance = async (studentId, filters = {}) => {
 
     const response = await axios.get(
       `${API_URL}/attendance?${params}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching child attendance"
+      error.response?.data?.message || "Error fetching child attendance",
     );
   }
 };
@@ -72,7 +77,7 @@ export const getChildPerformance = async (studentId) => {
     // This would need a grades/results endpoint
     const response = await axios.get(
       `${API_URL}/students/${studentId}/performance`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -88,12 +93,12 @@ export const getChildTimetable = async (classId) => {
   try {
     const response = await axios.get(
       `${API_URL}/schedules?classId=${classId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching timetable"
+      error.response?.data?.message || "Error fetching timetable",
     );
   }
 };
@@ -106,7 +111,7 @@ export const getChildFeeStatus = async (studentId) => {
     // This would need a fees endpoint
     const response = await axios.get(
       `${API_URL}/fees/student/${studentId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {

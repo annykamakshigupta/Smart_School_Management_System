@@ -32,10 +32,12 @@ import {
 import { Link } from "react-router-dom";
 import { StatCard, PageHeader } from "../../../components/UI";
 import {
-  getAllUsers,
-  getAllClassesWithTeachers,
+  getAllStudents,
+  getAllTeachers,
+  getDashboardStats,
 } from "../../../services/admin.service";
 import { getAllClasses } from "../../../services/class.service";
+import { getStoredUser } from "../../../services/auth.service";
 
 /**
  * AdminDashboard Component
@@ -59,40 +61,45 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
 
-      // Fetch all counts in parallel
-      const [studentsRes, teachersRes, parentsRes, classesRes] =
-        await Promise.all([
-          getAllUsers({ role: "student" }).catch(() => ({ data: [] })),
-          getAllUsers({ role: "teacher" }).catch(() => ({ data: [] })),
-          getAllUsers({ role: "parent" }).catch(() => ({ data: [] })),
-          getAllClassesWithTeachers().catch(() =>
-            getAllClasses().catch(() => ({ data: [] })),
-          ),
+      // Try to get dashboard stats from API
+      try {
+        const statsRes = await getDashboardStats();
+        if (statsRes.success && statsRes.data) {
+          setStats({
+            totalStudents: statsRes.data.totalStudents || 0,
+            totalTeachers: statsRes.data.totalTeachers || 0,
+            totalClasses: statsRes.data.totalClasses || 0,
+            totalParents: statsRes.data.totalParents || 0,
+          });
+        }
+      } catch (error) {
+        console.warn(
+          "Dashboard stats API not available, fetching individually",
+        );
+
+        // Fallback: Fetch counts individually
+        const [studentsRes, teachersRes, classesRes] = await Promise.all([
+          getAllStudents().catch(() => ({ data: [] })),
+          getAllTeachers().catch(() => ({ data: [] })),
+          getAllClasses().catch(() => ({ data: [] })),
         ]);
 
-      const students = (studentsRes.data || []).map((user) => ({
-        _id: user._id,
-        userId: user,
-        classId: null,
-        section: null,
-        rollNumber: null,
-      }));
-      const teachers = teachersRes.data || [];
-      const parents = parentsRes.data || [];
-      const classes = classesRes.data || [];
+        setStats({
+          totalStudents: studentsRes.data?.length || 0,
+          totalTeachers: teachersRes.data?.length || 0,
+          totalClasses: classesRes.data?.length || 0,
+          totalParents: 0, // Will need parent endpoint
+        });
+      }
 
-      setStats({
-        totalStudents: students.length,
-        totalTeachers: teachers.length,
-        totalClasses: classes.length,
-        totalParents: parents.length,
-      });
-
-      // Get 5 most recent students
+      // Fetch recent students for display
+      const studentsRes = await getAllStudents().catch(() => ({ data: [] }));
+      const students = studentsRes.data || [];
       setRecentStudents(students.slice(0, 5));
 
-      // Get classes with teacher info
-      setClassesWithTeachers(classes.slice(0, 5));
+      // Fetch classes
+      const classesRes = await getAllClasses().catch(() => ({ data: [] }));
+      setClassesWithTeachers(classesRes.data?.slice(0, 5) || []);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
       message.error("Failed to load dashboard data");
@@ -191,7 +198,9 @@ const AdminDashboard = () => {
                             color="success"
                             className="flex items-center gap-1">
                             <UserOutlined />
-                            {cls.classTeacher.name}
+                            {cls.classTeacher.userId?.name ||
+                              cls.classTeacher.name ||
+                              "Teacher"}
                           </Tag>
                         ) : (
                           <Tag color="warning">No Teacher</Tag>
@@ -240,16 +249,13 @@ const AdminDashboard = () => {
                         </div>
                         <div className="text-xs text-gray-500">
                           {student.classId?.name || "No class"} • Roll:{" "}
-                          {student.rollNumber || "N/A"}
+                          {student.rollNumber || "N/A"} • Admission:{" "}
+                          {student.admissionNumber || "N/A"}
                         </div>
                       </div>
-                      <div>
-                        {student.parentId ? (
-                          <Tag color="success">Parent Linked</Tag>
-                        ) : (
-                          <Tag color="warning">No Parent</Tag>
-                        )}
-                      </div>
+                      <Tag color="blue">
+                        {student.enrollmentStatus || "enrolled"}
+                      </Tag>
                     </div>
                   </List.Item>
                 )}

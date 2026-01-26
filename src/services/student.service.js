@@ -16,25 +16,31 @@ const getAuthHeaders = () => {
 
 /**
  * Get current student's profile with class and parent info
- * Fetches data based on logged-in user's ID
+ * Fetches data based on logged-in user's roleProfile
  */
 export const getMyStudentProfile = async () => {
   try {
-    // Get current user ID from stored user data
+    // Get current user data from storage
     const userData = localStorage.getItem("ssms_user");
     if (!userData) {
       throw new Error("User not authenticated");
     }
     const user = JSON.parse(userData);
 
+    // If roleProfile exists, return it directly
+    if (user.roleProfile) {
+      return { data: user.roleProfile, success: true };
+    }
+
+    // Otherwise fetch from API
     const response = await axios.get(
-      `${API_URL}/admin/students/user/${user.id}`,
-      getAuthHeaders()
+      `${API_URL}/admin/students/user/${user._id || user.id}`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching student profile"
+      error.response?.data?.message || "Error fetching student profile",
     );
   }
 };
@@ -46,7 +52,7 @@ export const getMySubjects = async (classId) => {
   try {
     const response = await axios.get(
       `${API_URL}/subjects?classId=${classId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -72,7 +78,7 @@ export const getMyAttendance = async (filters = {}) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching attendance"
+      error.response?.data?.message || "Error fetching attendance",
     );
   }
 };
@@ -84,12 +90,12 @@ export const getMyTimetable = async (classId) => {
   try {
     const response = await axios.get(
       `${API_URL}/schedules?classId=${classId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching timetable"
+      error.response?.data?.message || "Error fetching timetable",
     );
   }
 };

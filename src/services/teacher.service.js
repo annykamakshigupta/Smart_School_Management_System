@@ -15,31 +15,36 @@ const getAuthHeaders = () => {
 };
 
 /**
- * Get current user's ID from storage
+ * Get current teacher's profile ID from storage
  */
-const getCurrentUserId = () => {
+const getTeacherProfileId = () => {
   const userData = localStorage.getItem("ssms_user");
   if (!userData) {
     throw new Error("User not authenticated");
   }
-  return JSON.parse(userData).id;
+  const user = JSON.parse(userData);
+  // roleProfile contains the teacher profile data with _id
+  if (user.roleProfile && user.roleProfile._id) {
+    return user.roleProfile._id;
+  }
+  throw new Error("Teacher profile not found");
 };
 
 /**
  * Get current teacher's assigned classes and subjects
- * Auto-fetches based on logged-in teacher's ID
+ * Auto-fetches based on logged-in teacher's profile ID
  */
 export const getMyAssignments = async () => {
   try {
-    const userId = getCurrentUserId();
+    const teacherId = getTeacherProfileId();
     const response = await axios.get(
-      `${API_URL}/admin/teachers/${userId}/assignments`,
-      getAuthHeaders()
+      `${API_URL}/admin/teachers/${teacherId}/assignments`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching assignments"
+      error.response?.data?.message || "Error fetching assignments",
     );
   }
 };
@@ -51,7 +56,7 @@ export const getStudentsByClass = async (classId) => {
   try {
     const response = await axios.get(
       `${API_URL}/admin/students/class/${classId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -64,10 +69,10 @@ export const getStudentsByClass = async (classId) => {
  */
 export const getMySchedule = async () => {
   try {
-    const userId = getCurrentUserId();
+    const teacherId = getTeacherProfileId();
     const response = await axios.get(
-      `${API_URL}/schedules?teacherId=${userId}`,
-      getAuthHeaders()
+      `${API_URL}/schedules?teacherId=${teacherId}`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -80,10 +85,10 @@ export const getMySchedule = async () => {
  */
 export const getMySubjects = async () => {
   try {
-    const userId = getCurrentUserId();
+    const teacherId = getTeacherProfileId();
     const response = await axios.get(
-      `${API_URL}/subjects?teacherId=${userId}`,
-      getAuthHeaders()
+      `${API_URL}/subjects?teacherId=${teacherId}`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -96,10 +101,10 @@ export const getMySubjects = async () => {
  */
 export const getMyClasses = async () => {
   try {
-    const userId = getCurrentUserId();
+    const teacherId = getTeacherProfileId();
     const response = await axios.get(
-      `${API_URL}/classes?classTeacher=${userId}`,
-      getAuthHeaders()
+      `${API_URL}/classes?classTeacher=${teacherId}`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
