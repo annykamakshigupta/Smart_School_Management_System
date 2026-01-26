@@ -1,6 +1,9 @@
 /**
  * Authentication Provider
  * Provides authentication context and state management throughout the application
+ *
+ * IMPORTANT: Signup functionality has been removed.
+ * All user creation is done by Admin only through the Admin dashboard.
  */
 
 import {
@@ -15,7 +18,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   loginUser,
   logoutUser,
-  registerUser,
   getToken,
   getStoredUser,
   isTokenExpired,
@@ -138,27 +140,8 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: result.error };
       }
     },
-    [navigate, location.state]
+    [navigate, location.state],
   );
-
-  /**
-   * Signup handler
-   */
-  const signup = useCallback(async (userData) => {
-    setError(null);
-
-    const result = await registerUser(userData);
-
-    if (result.success) {
-      return {
-        success: true,
-        message: "Registration successful! Please login.",
-      };
-    } else {
-      setError(result.error);
-      return { success: false, error: result.error };
-    }
-  }, []);
 
   /**
    * Logout handler
@@ -179,7 +162,7 @@ export const AuthProvider = ({ children }) => {
       if (!user?.role) return false;
       return hasRole(user.role, allowedRoles);
     },
-    [user]
+    [user],
   );
 
   /**
@@ -223,7 +206,6 @@ export const AuthProvider = ({ children }) => {
 
       // Methods
       login,
-      signup,
       logout,
       checkRole,
       getDashboardRoute,
@@ -240,14 +222,13 @@ export const AuthProvider = ({ children }) => {
       authState,
       error,
       login,
-      signup,
       logout,
       checkRole,
       getDashboardRoute,
       clearError,
       forceLogout,
       initializeAuth,
-    ]
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

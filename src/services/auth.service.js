@@ -1,6 +1,9 @@
 /**
  * Authentication Service
  * Handles all authentication-related API calls, token management, and session persistence
+ *
+ * IMPORTANT: Signup has been removed. All user creation is done by Admin only.
+ * This service handles LOGIN functionality only.
  */
 
 import axios from "axios";
@@ -182,30 +185,6 @@ export const loginUser = async (credentials) => {
 };
 
 /**
- * Register new user
- * @param {object} userData - User registration data
- * @returns {Promise<object>} - { success, data, error }
- */
-export const registerUser = async (userData) => {
-  try {
-    const response = await axios.post(`${API_URL}/signup`, userData, {
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = response.data;
-    return {
-      success: true,
-      data: data,
-    };
-  } catch (error) {
-    const data = error.response?.data || {};
-    return {
-      success: false,
-      error: data.message || "Network error. Please try again.",
-    };
-  }
-};
-
-/**
  * Logout user
  * @returns {Promise<void>}
  */
@@ -325,7 +304,6 @@ export default {
   ROLES,
   ROLE_ROUTES,
   loginUser,
-  registerUser,
   logoutUser,
   refreshAuthToken,
   getCurrentUser,

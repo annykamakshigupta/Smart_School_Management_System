@@ -1,10 +1,10 @@
 /**
  * DashboardLayout Component
- * Shared layout for all role-based dashboards
- * Includes responsive sidebar, header, and content area
+ * Modern, responsive dashboard layout with collapsible sidebar
+ * Provides consistent structure for all role-based dashboards
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Layout } from "antd";
 import DashboardHeader from "../../components/Header/DashboardHeader";
@@ -14,50 +14,72 @@ import { useAuth } from "../../hooks/useAuth";
 const { Content } = Layout;
 
 /**
+ * Breakpoints for responsive design
+ */
+const BREAKPOINTS = {
+  mobile: 768,
+  tablet: 1024,
+};
+
+/**
  * DashboardLayout
- * Provides consistent layout for all dashboard pages
- * Responsive design with collapsible sidebar
+ * Provides modern admin panel layout with:
+ * - Collapsible sidebar
+ * - Responsive design for all devices
+ * - Smooth transitions
+ * - Role-based navigation
  */
 const DashboardLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { userRole, userName } = useAuth();
   const location = useLocation();
+
+  // Handle responsive behavior
+  const handleResize = useCallback(() => {
+    const width = window.innerWidth;
+    const mobile = width < BREAKPOINTS.mobile;
+    setIsMobile(mobile);
+
+    if (mobile) {
+      setSidebarCollapsed(true);
+    } else if (width < BREAKPOINTS.tablet) {
+      setSidebarCollapsed(true);
+    }
+  }, []);
+
+  // Initialize and listen for resize
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Handle responsive behavior
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setSidebarCollapsed(true);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Toggle sidebar collapse
-  const toggleSidebar = () => {
-    if (window.innerWidth < 768) {
-      setMobileMenuOpen(!mobileMenuOpen);
+  // Toggle sidebar
+  const toggleSidebar = useCallback(() => {
+    if (isMobile) {
+      setMobileMenuOpen((prev) => !prev);
     } else {
-      setSidebarCollapsed(!sidebarCollapsed);
+      setSidebarCollapsed((prev) => !prev);
     }
-  };
+  }, [isMobile]);
 
   // Close mobile menu
-  const closeMobileMenu = () => {
+  const closeMobileMenu = useCallback(() => {
     setMobileMenuOpen(false);
-  };
+  }, []);
+
+  // Calculate content margin based on sidebar state
+  const contentMargin = sidebarCollapsed ? "lg:ml-20" : "lg:ml-64";
 
   return (
-    <Layout className="min-h-screen">
+    <Layout className="min-h-screen bg-gray-50">
       {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
@@ -68,9 +90,10 @@ const DashboardLayout = () => {
 
       {/* Main Content Area */}
       <Layout
-        className={`transition-all duration-300 ${
-          sidebarCollapsed ? "md:ml-20" : "md:ml-64"
-        }`}>
+        className={`
+          transition-all duration-300 ease-out
+          ${contentMargin}
+        `}>
         {/* Header */}
         <DashboardHeader
           collapsed={sidebarCollapsed}
@@ -80,7 +103,13 @@ const DashboardLayout = () => {
         />
 
         {/* Content */}
-        <Content className="p-4 md:p-6 bg-gray-50 min-h-[calc(100vh-64px)] mt-16">
+        <Content
+          className="
+            p-4 md:p-6 lg:p-8
+            bg-linear-to-br from-gray-50 via-white to-gray-50
+            min-h-[calc(100vh-64px)] 
+            mt-16
+          ">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
@@ -90,7 +119,11 @@ const DashboardLayout = () => {
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="
+            fixed inset-0 bg-black/50 backdrop-blur-sm
+            z-30 lg:hidden
+            transition-opacity duration-300
+          "
           onClick={closeMobileMenu}
           aria-hidden="true"
         />

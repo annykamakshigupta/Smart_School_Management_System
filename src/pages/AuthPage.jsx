@@ -1,47 +1,32 @@
-import { useState, useEffect } from "react";
+/**
+ * AuthPage - Login Only
+ * Modern, clean authentication page
+ * SIGNUP REMOVED: All user creation is done by Admin only
+ */
+
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button, Input, Form, Checkbox, message, Alert } from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  PhoneOutlined,
-} from "@ant-design/icons";
-import { FaGoogle, FaFacebook, FaGraduationCap } from "react-icons/fa";
+import { Button, Input, Form, message, Alert } from "antd";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { FaGraduationCap } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [loginForm] = Form.useForm();
-  const [signupForm] = Form.useForm();
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
-  const { login, signup, error, clearError } = useAuth();
+  const { login, error, clearError } = useAuth();
   const location = useLocation();
 
   // Show redirect message if any
   const redirectMessage = location.state?.message;
 
-  // Clear error when switching forms
-  useEffect(() => {
-    clearError();
-  }, [isLogin, clearError]);
-
-  const handleToggle = (newState) => {
-    if (isAnimating || isLogin === newState) return;
-    setIsAnimating(true);
-    setIsLogin(newState);
-    setTimeout(() => setIsAnimating(false), 600);
-  };
-
-  const handleLoginSubmit = async (values) => {
+  const handleSubmit = async (values) => {
     setLoading(true);
+    clearError();
     try {
       const result = await login(values);
       if (result.success) {
         message.success("Login successful! Redirecting...");
-        // Redirect is handled by AuthProvider
       } else {
         message.error(result.error || "Login failed");
       }
@@ -52,787 +37,242 @@ const AuthPage = () => {
     }
   };
 
-  const handleSignupSubmit = async (values) => {
-    setLoading(true);
-    try {
-      const { confirmPassword, ...signupData } = values;
-      const result = await signup(signupData);
-      if (result.success) {
-        message.success(result.message || "Signup successful! Please login.");
-        setIsLogin(true);
-        signupForm.resetFields();
-      } else {
-        message.error(result.error || "Signup failed");
-      }
-    } catch (err) {
-      message.error("Signup error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Staggered animation for form fields
-  const getFieldDelay = (index) => ({
-    animationDelay: `${index * 30}ms`,
-  });
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Background Decoration */}
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
-        <div
-          className="absolute bottom-20 left-10 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"
-          style={{ animationDelay: "2s" }}></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-y-1/2 translate-x-1/4"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-y-1/2 -translate-x-1/4"></div>
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      <div className="relative w-full max-w-6xl">
-        {/* Desktop View - Sliding Panel Animation */}
-        <div className="hidden md:block relative h-200 bg-white rounded-2xl shadow-2xl overflow-hidden">
-          {/* Container for sliding panels */}
-          <div className="relative h-full w-full">
-            {/* Left Panel - Info Panel */}
-            <div
-              className="absolute top-0 left-0 w-1/2 h-full bg-indigo-600 text-white flex flex-col justify-center p-12 z-10"
-              style={{
-                transform: isLogin ? "translateX(0%)" : "translateX(100%)",
-                opacity: 1,
-                transition:
-                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms cubic-bezier(0.22, 1, 0.36, 1)",
-                willChange: "transform, opacity",
-              }}>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center transform transition-all duration-300 hover:scale-110 hover:rotate-6">
-                  <FaGraduationCap className="text-2xl text-indigo-600" />
+      {/* Main Container */}
+      <div className="relative w-full max-w-5xl">
+        <div className="flex flex-col lg:flex-row bg-white rounded-3xl shadow-2xl shadow-gray-200/60 overflow-hidden">
+          {/* Left Panel - Branding */}
+          <div className="lg:w-1/2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 text-white p-8 lg:p-12 flex flex-col justify-center relative overflow-hidden">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+            <div className="relative z-10">
+              {/* Logo */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-900/30 transform transition-transform duration-300 hover:scale-105 hover:rotate-3">
+                  <FaGraduationCap className="text-3xl text-indigo-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">SSMS</div>
-                  <div className="text-sm opacity-90">Smart School System</div>
-                </div>
-              </div>
-
-              {/* Shared illustration */}
-              <div className="mb-8">
-                <img
-                  src="https://thumbs.dreamstime.com/b/print-161837181.jpg"
-                  alt="School children playing"
-                  className="w-full h-96 object-cover rounded-2xl shadow-xl border border-white/20"
-                />
-              </div>
-
-              {/* Content with crossfade */}
-              <div className="relative">
-                {/* Login Panel Content */}
-                <div
-                  className="absolute inset-0 space-y-6"
-                  style={{
-                    opacity: isLogin ? 1 : 0,
-                    transform: isLogin ? "translateY(0)" : "translateY(-20px)",
-                    transition:
-                      "opacity 400ms cubic-bezier(0.22, 1, 0.36, 1) 100ms, transform 400ms cubic-bezier(0.22, 1, 0.36, 1) 100ms",
-                    pointerEvents: isLogin ? "auto" : "none",
-                  }}>
-                  <h2 className="text-4xl font-bold">Welcome Back!</h2>
-                  <button
-                    onClick={() => handleToggle(false)}
-                    disabled={isAnimating}
-                    className="px-8 py-3 border-2 border-white text-white rounded-xl font-semibold transform transition-all duration-300 hover:bg-white hover:text-indigo-600 hover:scale-105 hover:shadow-xl active:scale-95 disabled:opacity-50">
-                    Sign Up
-                  </button>
-                </div>
-
-                {/* Signup Panel Content */}
-                <div
-                  style={{
-                    opacity: !isLogin ? 1 : 0,
-                    transform: !isLogin ? "translateY(0)" : "translateY(-20px)",
-                    transition:
-                      "opacity 400ms cubic-bezier(0.22, 1, 0.36, 1) 100ms, transform 400ms cubic-bezier(0.22, 1, 0.36, 1) 100ms",
-                    pointerEvents: !isLogin ? "auto" : "none",
-                  }}>
-                  <h2 className="text-4xl font-bold">Hello, Friend!</h2>
-                  <p className="text-lg opacity-90">
-                    Enter your personal details and start your journey with us
+                  <h1 className="text-3xl font-bold tracking-tight">SSMS</h1>
+                  <p className="text-indigo-200 text-sm font-medium">
+                    Smart School Management System
                   </p>
-                  <button
-                    onClick={() => handleToggle(true)}
-                    disabled={isAnimating}
-                    className="mt-6 px-8 py-3 border-2 border-white text-white rounded-xl font-semibold transform transition-all duration-300 hover:bg-white hover:text-indigo-600 hover:scale-105 hover:shadow-xl active:scale-95 disabled:opacity-50">
-                    Login
-                  </button>
                 </div>
               </div>
-            </div>
 
-            {/* Right Panel - Login Form */}
-            <div
-              className="absolute top-0 right-0 w-1/2 h-full bg-white flex items-center justify-center p-12"
-              style={{
-                transform: isLogin ? "translateX(0%)" : "translateX(-100%)",
-                opacity: isLogin ? 1 : 0,
-                transition:
-                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms cubic-bezier(0.22, 1, 0.36, 1)",
-                willChange: "transform, opacity",
-                pointerEvents: isLogin ? "auto" : "none",
-              }}>
-              <div className="w-full max-w-md">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                  Login to SSMS
-                </h2>
-                <p className="text-gray-600 mb-8">
-                  Welcome back! Please login to your account
-                </p>
-
-                <div className="flex gap-3 mb-6">
-                  {[
-                    { Icon: FaGoogle, color: "text-red-500", label: "Google" },
-                    {
-                      Icon: FaFacebook,
-                      color: "text-blue-600",
-                      label: "Facebook",
-                    },
-                  ].map(({ Icon, color, label }, idx) => (
-                    <button
-                      key={idx}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl transform transition-all duration-300 hover:border-indigo-600 hover:bg-indigo-50 hover:scale-105 hover:shadow-lg active:scale-95"
-                      style={getFieldDelay(idx)}>
-                      <Icon className={`text-xl ${color}`} />
-                      <span className="font-medium text-gray-700">{label}</span>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">
-                      Or continue with email
-                    </span>
-                  </div>
-                </div>
-
-                <Form
-                  form={loginForm}
-                  onFinish={handleLoginSubmit}
-                  layout="vertical"
-                  requiredMark={false}>
+              {/* Illustration */}
+              <div className="my-8 hidden lg:block">
+                <div className="relative bg-white/10 rounded-2xl p-6 backdrop-blur-sm border border-white/20">
                   <div className="space-y-4">
-                    {[
-                      {
-                        name: "email",
-                        icon: MailOutlined,
-                        placeholder: "Email Address",
-                        type: "email",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your email",
-                          },
-                          {
-                            type: "email",
-                            message: "Please enter a valid email",
-                          },
-                        ],
-                      },
-                      {
-                        name: "password",
-                        icon: LockOutlined,
-                        placeholder: "Password",
-                        type: "password",
-                        rules: [
-                          {
-                            required: true,
-                            message: "Please enter your password",
-                          },
-                        ],
-                      },
-                    ].map((field, idx) => (
-                      <Form.Item
-                        key={field.name}
-                        name={field.name}
-                        rules={field.rules}
-                        style={getFieldDelay(idx + 2)}>
-                        {field.type === "password" ? (
-                          <Input.Password
-                            prefix={<field.icon className="text-gray-400" />}
-                            placeholder={field.placeholder}
-                            size="large"
-                            className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                          />
-                        ) : (
-                          <Input
-                            prefix={<field.icon className="text-gray-400" />}
-                            placeholder={field.placeholder}
-                            size="large"
-                            className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                          />
-                        )}
-                      </Form.Item>
-                    ))}
-                  </div>
-
-                  <div
-                    className="flex items-center justify-between mb-6 mt-4"
-                    style={getFieldDelay(4)}>
-                    <Link
-                      to="/forgot-password"
-                      className="text-indigo-600 hover:text-indigo-700 font-medium transform transition-all duration-200 hover:scale-105">
-                      Forgot password?
-                    </Link>
-                  </div>
-
-                  <Form.Item style={getFieldDelay(5)}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size="large"
-                      className="w-full rounded-xl h-12 text-base font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95">
-                      Login
-                    </Button>
-                  </Form.Item>
-                </Form>
-
-                <p
-                  className="text-center text-gray-600 mt-6"
-                  style={getFieldDelay(6)}>
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => handleToggle(false)}
-                    disabled={isAnimating}
-                    className="text-indigo-600 font-semibold hover:text-indigo-700 transform transition-all duration-200 hover:scale-105 disabled:opacity-50">
-                    Sign Up
-                  </button>
-                </p>
-              </div>
-            </div>
-
-            {/* Left Panel - Signup Form */}
-            <div
-              className="absolute top-0 left-0 w-1/2 h-full bg-white flex items-center justify-center p-12"
-              style={{
-                transform: !isLogin ? "translateX(0%)" : "translateX(-100%)",
-                opacity: !isLogin ? 1 : 0,
-                transition:
-                  "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms cubic-bezier(0.22, 1, 0.36, 1)",
-                willChange: "transform, opacity",
-                pointerEvents: !isLogin ? "auto" : "none",
-              }}>
-              <div className="w-full max-w-md">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                  Create Account
-                </h2>
-                <p className="text-gray-600 mb-8">
-                  Create your SSMS account to manage student, parent and teacher
-                  access.
-                </p>
-
-                <Form
-                  form={signupForm}
-                  onFinish={handleSignupSubmit}
-                  layout="vertical"
-                  requiredMark={false}>
-                  <div className="space-y-4">
-                    <Form.Item
-                      name="name"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your full name",
-                        },
-                      ]}
-                      style={getFieldDelay(2)}>
-                      <Input
-                        prefix={<UserOutlined className="text-gray-400" />}
-                        placeholder="Full Name"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="role"
-                      label="Account Type"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select your account type",
-                        },
-                      ]}
-                      style={getFieldDelay(3)}>
-                      <select
-                        className="w-full rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-indigo-600 py-3 px-4 text-base text-gray-700 bg-white shadow-sm transition-all duration-300"
-                        defaultValue="">
-                       <option value="" disabled>
-                          Continue as Student/Parent/Teacher/admin
-                        </option>
-                        <option value="student">Student</option>
-                        <option value="parent">Parent</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </Form.Item>
-
-                    <div
-                      className="text-xs text-gray-500 mb-2 pl-1"
-                      style={getFieldDelay(3.5)}>
-                      Admin accounts are created internally.
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                        <span className="text-lg">📚</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">
+                          Student Management
+                        </div>
+                        <div className="text-xs text-indigo-200">
+                          Track student progress
+                        </div>
+                      </div>
                     </div>
-
-                    <Form.Item
-                      name="email"
-                      rules={[
-                        { required: true, message: "Please enter your email" },
-                        {
-                          type: "email",
-                          message: "Please enter a valid email",
-                        },
-                      ]}
-                      style={getFieldDelay(4)}>
-                      <Input
-                        prefix={<MailOutlined className="text-gray-400" />}
-                        placeholder="Email Address"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="phone"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your mobile number",
-                        },
-                      ]}
-                      style={getFieldDelay(5)}>
-                      <Input
-                        prefix={<PhoneOutlined className="text-gray-400" />}
-                        placeholder="Mobile Number"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password",
-                        },
-                        {
-                          min: 8,
-                          message: "Password must be at least 8 characters",
-                        },
-                      ]}
-                      style={getFieldDelay(6)}>
-                      <Input.Password
-                        prefix={<LockOutlined className="text-gray-400" />}
-                        placeholder="Password"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="confirmPassword"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please confirm your password",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              new Error("Passwords do not match")
-                            );
-                          },
-                        }),
-                      ]}
-                      style={getFieldDelay(7)}>
-                      <Input.Password
-                        prefix={<LockOutlined className="text-gray-400" />}
-                        placeholder="Confirm Password"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
-                      />
-                    </Form.Item>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                        <span className="text-lg">👨‍🏫</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">
+                          Teacher Portal
+                        </div>
+                        <div className="text-xs text-indigo-200">
+                          Manage classes & attendance
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                        <span className="text-lg">👪</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">
+                          Parent Access
+                        </div>
+                        <div className="text-xs text-indigo-200">
+                          Monitor child's education
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <Form.Item style={getFieldDelay(9)}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size="large"
-                      className="w-full rounded-xl h-12 text-base font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95">
-                      Sign Up
-                    </Button>
-                  </Form.Item>
-                </Form>
-
-                <p
-                  className="text-center text-gray-600 mt-6"
-                  style={getFieldDelay(8)}>
-                  Already have an account?{" "}
-                  <button
-                    onClick={() => handleToggle(true)}
-                    disabled={isAnimating}
-                    className="text-indigo-600 font-semibold hover:text-indigo-700 transform transition-all duration-200 hover:scale-105 disabled:opacity-50">
-                    Login
-                  </button>
-                </p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Mobile View - Vertical Slide Animation */}
-        <div className="md:hidden bg-white rounded-2xl shadow-2xl overflow-hidden">
-          <div className="p-8">
-            <div className="flex items-center justify-center gap-3 mb-8 transform transition-all duration-300 hover:scale-105">
-              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
-                <FaGraduationCap className="text-2xl text-white" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">SSMS</div>
-                <div className="text-sm text-gray-600">Smart School System</div>
-              </div>
-            </div>
-
-            <div className="flex border-b border-gray-200 mb-8">
-              <button
-                onClick={() => handleToggle(true)}
-                disabled={isAnimating}
-                className={`flex-1 pb-4 text-center font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 ${
-                  isLogin
-                    ? "text-indigo-600 border-b-2 border-indigo-600"
-                    : "text-gray-500"
-                }`}>
-                Login
-              </button>
-              <button
-                onClick={() => handleToggle(false)}
-                disabled={isAnimating}
-                className={`flex-1 pb-4 text-center font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 ${
-                  !isLogin
-                    ? "text-indigo-600 border-b-2 border-indigo-600"
-                    : "text-gray-500"
-                }`}>
-                Sign Up
-              </button>
-            </div>
-
-            {/* Mobile Forms Container */}
-            <div className="relative overflow-hidden">
-              {/* Login Form */}
-              <div
-                style={{
-                  transform: isLogin ? "translateY(0)" : "translateY(-20px)",
-                  opacity: isLogin ? 1 : 0,
-                  transition:
-                    "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  pointerEvents: isLogin ? "auto" : "none",
-                  position: isLogin ? "relative" : "absolute",
-                  width: "100%",
-                }}>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {/* Welcome Text */}
+              <div className="space-y-3">
+                <h2 className="text-2xl lg:text-3xl font-bold">
                   Welcome Back!
                 </h2>
-
-                <div className="flex gap-3 mb-6">
-                  {[FaGoogle, FaFacebook].map((Icon, idx) => (
-                    <button
-                      key={idx}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl transform transition-all duration-300 hover:border-indigo-600 hover:bg-indigo-50 hover:scale-105 active:scale-95">
-                      <Icon
-                        className={`text-lg ${
-                          idx === 0 ? "text-red-500" : "text-blue-600"
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">
-                      Or continue with
-                    </span>
-                  </div>
-                </div>
-
-                <Form
-                  form={loginForm}
-                  onFinish={handleLoginSubmit}
-                  layout="vertical"
-                  requiredMark={false}>
-                  <div className="space-y-4">
-                    <Form.Item
-                      name="email"
-                      rules={[
-                        { required: true, message: "Please enter your email" },
-                        {
-                          type: "email",
-                          message: "Please enter a valid email",
-                        },
-                      ]}>
-                      <Input
-                        prefix={<MailOutlined className="text-gray-400" />}
-                        placeholder="Email Address"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password",
-                        },
-                      ]}>
-                      <Input.Password
-                        prefix={<LockOutlined className="text-gray-400" />}
-                        placeholder="Password"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-6 mt-4">
-                    <Link
-                      to="/forgot-password"
-                      className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
-                      Forgot?
-                    </Link>
-                  </div>
-
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size="large"
-                      className="w-full rounded-xl h-12 text-base font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95">
-                      Login
-                    </Button>
-                  </Form.Item>
-                </Form>
+                <p className="text-indigo-200 text-sm lg:text-base leading-relaxed">
+                  Sign in to access your personalized dashboard and manage your
+                  school activities efficiently.
+                </p>
               </div>
 
-              {/* Signup Form */}
-              <div
-                style={{
-                  transform: !isLogin ? "translateY(0)" : "translateY(-20px)",
-                  opacity: !isLogin ? 1 : 0,
-                  transition:
-                    "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  pointerEvents: !isLogin ? "auto" : "none",
-                  position: !isLogin ? "relative" : "absolute",
-                  width: "100%",
-                  top: 0,
-                }}>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Create Account
+              {/* Info Badge */}
+              <div className="mt-8 hidden lg:flex items-center gap-2 text-xs text-indigo-200">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span>Secure authentication with role-based access</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Panel - Login Form */}
+          <div className="lg:w-1/2 p-8 lg:p-12 flex items-center justify-center">
+            <div className="w-full max-w-md">
+              {/* Mobile Logo */}
+              <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
+                <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
+                  <FaGraduationCap className="text-2xl text-white" />
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-gray-900">SSMS</div>
+                  <div className="text-xs text-gray-500">
+                    Smart School System
+                  </div>
+                </div>
+              </div>
+
+              {/* Header */}
+              <div className="text-center lg:text-left mb-8">
+                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+                  Sign In
                 </h2>
+                <p className="text-gray-500">
+                  Enter your credentials to access your account
+                </p>
+              </div>
 
-                <div className="flex gap-3 mb-6">
-                  {[FaGoogle, FaFacebook].map((Icon, idx) => (
-                    <button
-                      key={idx}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-200 rounded-xl transform transition-all duration-300 hover:border-indigo-600 hover:bg-indigo-50 hover:scale-105 active:scale-95">
-                      <Icon
-                        className={`text-lg ${
-                          idx === 0 ? "text-red-500" : "text-blue-600"
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
+              {/* Alert Messages */}
+              {redirectMessage && (
+                <Alert
+                  message={redirectMessage}
+                  type="info"
+                  showIcon
+                  className="mb-6 rounded-xl"
+                />
+              )}
+              {error && (
+                <Alert
+                  message={error}
+                  type="error"
+                  showIcon
+                  closable
+                  onClose={clearError}
+                  className="mb-6 rounded-xl"
+                />
+              )}
 
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">
-                      Or register with
+              {/* Login Form */}
+              <Form
+                form={form}
+                onFinish={handleSubmit}
+                layout="vertical"
+                requiredMark={false}
+                className="space-y-1">
+                <Form.Item
+                  name="email"
+                  label={
+                    <span className="text-gray-700 font-medium">
+                      Email Address
                     </span>
-                  </div>
+                  }
+                  rules={[
+                    { required: true, message: "Please enter your email" },
+                    { type: "email", message: "Please enter a valid email" },
+                  ]}>
+                  <Input
+                    prefix={<MailOutlined className="text-gray-400" />}
+                    placeholder="name@school.edu"
+                    size="large"
+                    className="rounded-xl h-12 border-gray-200 hover:border-indigo-400 focus:border-indigo-500 transition-colors"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="password"
+                  label={
+                    <span className="text-gray-700 font-medium">Password</span>
+                  }
+                  rules={[
+                    { required: true, message: "Please enter your password" },
+                  ]}>
+                  <Input.Password
+                    prefix={<LockOutlined className="text-gray-400" />}
+                    placeholder="Enter your password"
+                    size="large"
+                    className="rounded-xl h-12 border-gray-200 hover:border-indigo-400 focus:border-indigo-500 transition-colors"
+                  />
+                </Form.Item>
+
+                <div className="flex items-center justify-end mb-6">
+                  <Link
+                    to="/forgot-password"
+                    className="text-indigo-600 hover:text-indigo-700 text-sm font-medium transition-colors">
+                    Forgot password?
+                  </Link>
                 </div>
 
-                <Form
-                  form={signupForm}
-                  onFinish={handleSignupSubmit}
-                  layout="vertical"
-                  requiredMark={false}>
-                  <div className="space-y-4">
-                    <Form.Item
-                      name="name"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your full name",
-                        },
-                      ]}>
-                      <Input
-                        prefix={<UserOutlined className="text-gray-400" />}
-                        placeholder="Full Name"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
+                <Form.Item className="mb-0">
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    size="large"
+                    className="w-full h-12 rounded-xl text-base font-semibold bg-indigo-600 hover:bg-indigo-700 border-none shadow-lg shadow-indigo-600/30 hover:shadow-xl hover:shadow-indigo-600/40 transition-all duration-300">
+                    {loading ? "Signing in..." : "Sign In"}
+                  </Button>
+                </Form.Item>
+              </Form>
 
-                    <Form.Item
-                      name="role"
-                      label="Account Type"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select your account type",
-                        },
-                      ]}>
-                      <select
-                        className="w-full rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-indigo-600 py-3 px-4 text-base text-gray-700 bg-white shadow-sm transition-all duration-300"
-                        defaultValue="">
-                        <option value="" disabled>
-                          Continue as Student/Parent/Teacher/admin
-                        </option>
-                        <option value="student">Student</option>
-                        <option value="parent">Parent</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="admin">admin</option>
-                      </select>
-                    </Form.Item>
+              {/* Help Text */}
+              <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-xs text-gray-500 text-center">
+                  <span className="font-medium text-gray-700">
+                    Need an account?
+                  </span>{" "}
+                  Contact your school administrator to get access credentials.
+                </p>
+              </div>
 
-                    <div className="text-xs text-gray-500 mb-2 pl-1">
-                      Admin accounts are created internally.
-                    </div>
-
-                    <Form.Item
-                      name="email"
-                      rules={[
-                        { required: true, message: "Please enter your email" },
-                        {
-                          type: "email",
-                          message: "Please enter a valid email",
-                        },
-                      ]}>
-                      <Input
-                        prefix={<MailOutlined className="text-gray-400" />}
-                        placeholder="Email Address"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="phone"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your mobile number",
-                        },
-                      ]}>
-                      <Input
-                        prefix={<PhoneOutlined className="text-gray-400" />}
-                        placeholder="Mobile Number"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your password",
-                        },
-                        {
-                          min: 8,
-                          message: "Password must be at least 8 characters",
-                        },
-                      ]}>
-                      <Input.Password
-                        prefix={<LockOutlined className="text-gray-400" />}
-                        placeholder="Password"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name="confirmPassword"
-                      dependencies={["password"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please confirm your password",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              new Error("Passwords do not match")
-                            );
-                          },
-                        }),
-                      ]}>
-                      <Input.Password
-                        prefix={<LockOutlined className="text-gray-400" />}
-                        placeholder="Confirm Password"
-                        size="large"
-                        className="rounded-xl transform transition-all duration-300 focus:scale-[1.02]"
-                      />
-                    </Form.Item>
-                  </div>
-
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size="large"
-                      className="w-full rounded-xl h-12 text-base font-semibold transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95">
-                      Sign Up
-                    </Button>
-                  </Form.Item>
-                </Form>
+              {/* Footer */}
+              <div className="mt-6 text-center">
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 text-gray-500 hover:text-indigo-600 text-sm font-medium transition-colors">
+                  <span>←</span>
+                  <span>Back to Home</span>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Back to Home Link */}
-        <div className="text-center mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 font-medium transition-all duration-300 transform hover:scale-105">
-            <span>←</span>
-            <span>Back to Home</span>
-          </Link>
+        {/* Bottom Badge */}
+        <div className="mt-6 text-center">
+          <p className="text-xs text-gray-400">
+            © {new Date().getFullYear()} SSMS - Smart School Management System
+          </p>
         </div>
       </div>
-
-      <style jsx>{`
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

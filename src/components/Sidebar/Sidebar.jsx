@@ -1,9 +1,9 @@
 /**
- * Premium Sidebar Component
- * Modern SaaS-grade sidebar with role-based navigation
+ * Sidebar Component
+ * Modern, responsive sidebar with role-based navigation
+ * Features: Collapsible, mobile-friendly, smooth animations
  */
 
-import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -21,10 +21,10 @@ import {
   UserCircle,
   CreditCard,
   GraduationCap,
-  ChevronRight,
-  Menu,
   X,
   Book,
+  UserPlus,
+  Link2,
 } from "lucide-react";
 
 /**
@@ -33,7 +33,7 @@ import {
 const NAVIGATION_CONFIG = {
   admin: [
     {
-      section: "Main",
+      section: "Overview",
       items: [
         {
           key: "dashboard",
@@ -41,38 +41,32 @@ const NAVIGATION_CONFIG = {
           path: "/admin/dashboard",
           icon: LayoutDashboard,
         },
+      ],
+    },
+    {
+      section: "User Management",
+      items: [
         {
           key: "users",
-          label: "User Management",
+          label: "All Users",
           path: "/admin/users",
           icon: Users,
         },
         {
-          key: "attendance",
-          label: "Attendance",
-          path: "/admin/attendance",
-          icon: ClipboardCheck,
-        },
-      ],
-    },
-    {
-      section: "Enrollment",
-      items: [
-        {
           key: "student-enroll",
-          label: "Student Enrollment",
+          label: "Enroll Student",
           path: "/admin/students/enroll",
-          icon: GraduationCap,
+          icon: UserPlus,
         },
         {
           key: "parent-mapping",
-          label: "Parent-Child Mapping",
+          label: "Parent-Child Link",
           path: "/admin/parents/mapping",
-          icon: Users,
+          icon: Link2,
         },
         {
           key: "assignments",
-          label: "Teacher Assignments",
+          label: "Teacher Assign",
           path: "/admin/assignments",
           icon: UserCircle,
         },
@@ -94,6 +88,23 @@ const NAVIGATION_CONFIG = {
           icon: Book,
         },
         {
+          key: "timetable",
+          label: "Timetable",
+          path: "/admin/academics/timetable",
+          icon: Calendar,
+        },
+        {
+          key: "attendance",
+          label: "Attendance",
+          path: "/admin/attendance",
+          icon: ClipboardCheck,
+        },
+      ],
+    },
+    {
+      section: "Finance",
+      items: [
+        {
           key: "fees",
           label: "Fees & Finance",
           path: "/admin/fees",
@@ -102,22 +113,22 @@ const NAVIGATION_CONFIG = {
       ],
     },
     {
-      section: "Analytics",
+      section: "Reports",
       items: [
         {
           key: "reports",
-          label: "Reports & Analytics",
+          label: "Analytics",
           path: "/admin/reports",
           icon: BarChart3,
         },
       ],
     },
     {
-      section: "Settings",
+      section: "System",
       items: [
         {
           key: "settings",
-          label: "System Settings",
+          label: "Settings",
           path: "/admin/settings",
           icon: Settings,
         },
@@ -126,7 +137,7 @@ const NAVIGATION_CONFIG = {
   ],
   teacher: [
     {
-      section: "Main",
+      section: "Overview",
       items: [
         {
           key: "dashboard",
@@ -134,6 +145,11 @@ const NAVIGATION_CONFIG = {
           path: "/teacher/dashboard",
           icon: LayoutDashboard,
         },
+      ],
+    },
+    {
+      section: "Attendance",
+      items: [
         {
           key: "mark-attendance",
           label: "Mark Attendance",
@@ -141,12 +157,11 @@ const NAVIGATION_CONFIG = {
           icon: ClipboardCheck,
         },
         {
-          key: "attendance",
-          label: "Attendance",
+          key: "view-attendance",
+          label: "View Records",
           path: "/teacher/attendance",
-          icon: ClipboardCheck,
+          icon: FileText,
         },
-        
       ],
     },
     {
@@ -160,9 +175,15 @@ const NAVIGATION_CONFIG = {
         },
         {
           key: "performance",
-          label: "Student Performance",
+          label: "Performance",
           path: "/teacher/performance",
           icon: TrendingUp,
+        },
+        {
+          key: "schedule",
+          label: "My Schedule",
+          path: "/teacher/schedule",
+          icon: Calendar,
         },
       ],
     },
@@ -180,7 +201,7 @@ const NAVIGATION_CONFIG = {
   ],
   student: [
     {
-      section: "Main",
+      section: "Overview",
       items: [
         {
           key: "dashboard",
@@ -188,17 +209,17 @@ const NAVIGATION_CONFIG = {
           path: "/student/dashboard",
           icon: LayoutDashboard,
         },
+      ],
+    },
+    {
+      section: "Academics",
+      items: [
         {
           key: "classes",
           label: "My Classes",
           path: "/student/classes",
           icon: BookOpen,
         },
-      ],
-    },
-    {
-      section: "Academics",
-      items: [
         {
           key: "attendance",
           label: "Attendance",
@@ -219,10 +240,21 @@ const NAVIGATION_CONFIG = {
         },
       ],
     },
+    {
+      section: "Assignments",
+      items: [
+        {
+          key: "assignments",
+          label: "Assignments",
+          path: "/student/assignments",
+          icon: FileText,
+        },
+      ],
+    },
   ],
   parent: [
     {
-      section: "Main",
+      section: "Overview",
       items: [
         {
           key: "dashboard",
@@ -230,24 +262,40 @@ const NAVIGATION_CONFIG = {
           path: "/parent/dashboard",
           icon: LayoutDashboard,
         },
-        {
-          key: "child",
-          label: "Child Overview",
-          path: "/parent/child",
-          icon: UserCircle,
-        },
       ],
     },
     {
-      section: "Academics",
+      section: "Children",
       items: [
+        {
+          key: "child",
+          label: "My Children",
+          path: "/parent/child",
+          icon: UserCircle,
+        },
         {
           key: "attendance",
           label: "Attendance",
           path: "/parent/attendance",
           icon: ClipboardCheck,
         },
-        { key: "fees", label: "Fees", path: "/parent/fees", icon: CreditCard },
+        {
+          key: "results",
+          label: "Results",
+          path: "/parent/results",
+          icon: Award,
+        },
+      ],
+    },
+    {
+      section: "Finance",
+      items: [
+        {
+          key: "fees",
+          label: "Fee Payments",
+          path: "/parent/fees",
+          icon: CreditCard,
+        },
       ],
     },
     {
@@ -269,104 +317,93 @@ const NAVIGATION_CONFIG = {
  */
 const ROLE_THEMES = {
   admin: {
-    accent: "#ef4444",
-    accentRgb: "239, 68, 68",
+    primary: "#dc2626",
+    gradient: "from-red-600 to-red-700",
+    light: "bg-red-50",
+    text: "text-red-600",
   },
   teacher: {
-    accent: "#3b82f6",
-    accentRgb: "59, 130, 246",
+    primary: "#2563eb",
+    gradient: "from-blue-600 to-blue-700",
+    light: "bg-blue-50",
+    text: "text-blue-600",
   },
   student: {
-    accent: "#10b981",
-    accentRgb: "16, 185, 129",
+    primary: "#059669",
+    gradient: "from-emerald-600 to-emerald-700",
+    light: "bg-emerald-50",
+    text: "text-emerald-600",
   },
   parent: {
-    accent: "#8b5cf6",
-    accentRgb: "139, 92, 246",
+    primary: "#7c3aed",
+    gradient: "from-violet-600 to-violet-700",
+    light: "bg-violet-50",
+    text: "text-violet-600",
   },
 };
 
 /**
  * Navigation Item Component
  */
-const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
+const NavItem = ({ item, collapsed, theme, onNavigate }) => {
   const location = useLocation();
   const Icon = item.icon;
-  const isActive = location.pathname === item.path;
+  const isActive =
+    location.pathname === item.path ||
+    (item.path.includes("?") && location.pathname === item.path.split("?")[0]);
 
   return (
     <NavLink
       to={item.path}
       onClick={onNavigate}
-      className="group relative block"
-      style={{
-        "--accent-color": accentColor,
-        "--accent-rgb": accentRgb,
-      }}>
+      className="group relative block">
       <div
         className={`
           flex items-center gap-3 px-3 py-2.5 rounded-xl
-          transition-all duration-300 ease-out
-          ${isActive ? "bg-linear-to-r shadow-sm" : "hover:bg-gray-50/80"}
-        `}
-        style={
-          isActive
-            ? {
-                background: `linear-gradient(135deg, rgba(var(--accent-rgb), 0.1) 0%, rgba(var(--accent-rgb), 0.05) 100%)`,
-                borderLeft: `3px solid var(--accent-color)`,
-              }
-            : {}
-        }>
+          transition-all duration-200 ease-out
+          ${
+            isActive
+              ? `${theme.light} ${theme.text} shadow-sm`
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }
+          ${collapsed ? "justify-center" : ""}
+        `}>
         {/* Active Indicator */}
         {isActive && (
           <div
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full"
-            style={{ backgroundColor: accentColor }}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b ${theme.gradient}`}
           />
         )}
 
         {/* Icon */}
-        <div
-          className={`
-            flex items-center justify-center shrink-0 transition-all duration-300
-            ${collapsed ? "mx-auto" : ""}
-            ${isActive ? "" : "group-hover:scale-110"}
-          `}>
-          <Icon
-            size={20}
-            strokeWidth={2}
-            className="transition-colors duration-300"
-            style={{
-              color: isActive ? accentColor : "#64748b",
-            }}
-          />
-        </div>
+        <Icon
+          size={20}
+          strokeWidth={2}
+          className={`shrink-0 transition-transform duration-200 ${
+            !isActive && "group-hover:scale-110"
+          }`}
+        />
 
         {/* Label */}
         {!collapsed && (
           <span
-            className={`
-              text-sm font-medium transition-colors duration-300
-              ${
-                isActive
-                  ? "font-semibold"
-                  : "text-gray-600 group-hover:text-gray-900"
-              }
-            `}
-            style={isActive ? { color: accentColor } : {}}>
+            className={`text-sm font-medium truncate ${isActive ? "font-semibold" : ""}`}>
             {item.label}
           </span>
-        )}
-
-        {/* Hover Effect */}
-        {!isActive && (
-          <div className="absolute inset-0 rounded-xl bg-gray-100/0 group-hover:bg-gray-100/50 transition-colors duration-300 -z-10" />
         )}
       </div>
 
       {/* Tooltip for collapsed mode */}
       {collapsed && (
-        <div className="absolute left-full ml-4 px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+        <div
+          className="
+          absolute left-full ml-3 px-3 py-2 
+          bg-gray-900 text-white text-sm font-medium 
+          rounded-lg shadow-xl 
+          opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+          transition-all duration-200 whitespace-nowrap z-50 
+          pointer-events-none
+        ">
           {item.label}
           <div className="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-gray-900" />
         </div>
@@ -378,13 +415,7 @@ const NavItem = ({ item, collapsed, accentColor, accentRgb, onNavigate }) => {
 /**
  * Navigation Section Component
  */
-const NavSection = ({
-  section,
-  collapsed,
-  accentColor,
-  accentRgb,
-  onNavigate,
-}) => {
+const NavSection = ({ section, collapsed, theme, onNavigate }) => {
   return (
     <div className="space-y-1">
       {/* Section Header */}
@@ -401,8 +432,7 @@ const NavSection = ({
             key={item.key}
             item={item}
             collapsed={collapsed}
-            accentColor={accentColor}
-            accentRgb={accentRgb}
+            theme={theme}
             onNavigate={onNavigate}
           />
         ))}
@@ -421,23 +451,18 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
 
   // Get schedule route based on user role
   const getScheduleRoute = () => {
-    switch (userRole) {
-      case "admin":
-        return "/admin/academics/timetable";
-      case "teacher":
-        return "/teacher/schedule";
-      case "student":
-        return "/student/timetable";
-      case "parent":
-        return "/parent/timetable";
-      default:
-        return "/";
-    }
+    const routes = {
+      admin: "/admin/academics/timetable",
+      teacher: "/teacher/schedule",
+      student: "/student/timetable",
+      parent: "/parent/timetable",
+    };
+    return routes[userRole] || "/";
   };
 
   const handleScheduleClick = () => {
     navigate(getScheduleRoute());
-    if (onClose) onClose(); // Close mobile sidebar if open
+    if (onClose) onClose();
   };
 
   return (
@@ -446,26 +471,23 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       <aside
         className={`
           hidden lg:flex flex-col fixed top-0 left-0 h-full
-          bg-white border-r border-gray-200/80
-          transition-all duration-500 ease-out z-40
+          bg-white border-r border-gray-200
+          transition-all duration-300 ease-out z-40
           ${collapsed ? "w-20" : "w-64"}
-        `}
-        style={{
-          backdropFilter: "blur(10px)",
-          background: "linear-gradient(to bottom, #ffffff 0%, #fafafa 100%)",
-        }}>
+        `}>
         {/* Logo Section */}
         <div
           className={`
-            flex items-center h-16 px-4 border-b border-gray-200/80
-            transition-all duration-500
+            flex items-center h-16 px-4 border-b border-gray-200
             ${collapsed ? "justify-center px-0" : "gap-3"}
           `}>
           <div
-            className="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl shadow-sm transition-all duration-300 hover:scale-105"
-            style={{
-              background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-            }}>
+            className={`
+              flex items-center justify-center shrink-0 w-10 h-10 
+              rounded-xl shadow-md
+              bg-gradient-to-br ${theme.gradient}
+              transition-transform duration-300 hover:scale-105
+            `}>
             <GraduationCap size={22} strokeWidth={2.5} className="text-white" />
           </div>
 
@@ -475,33 +497,35 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
                 SSMS
               </div>
               <div className="text-xs text-gray-500 font-medium">
-                Smart School System
+                School Management
               </div>
             </div>
           )}
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-300">
           {navigation.map((section, index) => (
             <NavSection
               key={index}
               section={section}
               collapsed={collapsed}
-              accentColor={theme.accent}
-              accentRgb={theme.accentRgb}
+              theme={theme}
             />
           ))}
         </nav>
 
-        {/* Schedule Button */}
-        <div className={`px-4 pb-4 ${collapsed ? "px-2" : ""}`}>
+        {/* Quick Action Button */}
+        <div className={`px-3 pb-3 ${collapsed ? "px-2" : ""}`}>
           <button
             onClick={handleScheduleClick}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
-            style={{
-              background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-            }}
+            className={`
+              w-full flex items-center justify-center gap-2 
+              px-4 py-3 rounded-xl font-semibold text-white 
+              shadow-lg hover:shadow-xl 
+              transition-all duration-300 hover:scale-[1.02] active:scale-95
+              bg-gradient-to-r ${theme.gradient}
+            `}
             title="View Schedule">
             <Calendar size={20} strokeWidth={2.5} />
             {!collapsed && <span>Schedule</span>}
@@ -511,12 +535,11 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
         {/* Footer */}
         <div
           className={`
-            px-4 py-4 border-t border-gray-200/80
-            transition-all duration-500
+            px-4 py-3 border-t border-gray-200
             ${collapsed ? "text-center px-2" : ""}
           `}>
           <div className="text-xs text-gray-400 font-medium">
-            {collapsed ? "©" : "© 2026 SSMS"}
+            {collapsed ? "©" : `© ${new Date().getFullYear()} SSMS`}
           </div>
         </div>
       </aside>
@@ -524,7 +547,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300"
+          className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={onClose}
         />
       )}
@@ -533,21 +556,19 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       <aside
         className={`
           lg:hidden fixed top-0 left-0 h-full w-72 bg-white z-50
-          transform transition-transform duration-500 ease-out
+          transform transition-transform duration-300 ease-out
           shadow-2xl
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
-        style={{
-          background: "linear-gradient(to bottom, #ffffff 0%, #fafafa 100%)",
-        }}>
+        `}>
         {/* Mobile Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200/80">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div
-              className="flex items-center justify-center w-10 h-10 rounded-xl shadow-sm"
-              style={{
-                background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-              }}>
+              className={`
+                flex items-center justify-center w-10 h-10 
+                rounded-xl shadow-md
+                bg-gradient-to-br ${theme.gradient}
+              `}>
               <GraduationCap
                 size={22}
                 strokeWidth={2.5}
@@ -559,50 +580,51 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
                 SSMS
               </div>
               <div className="text-xs text-gray-500 font-medium">
-                Smart School System
+                School Management
               </div>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 active:scale-95"
+            className="p-2 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200"
             aria-label="Close menu">
             <X size={20} strokeWidth={2} />
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-4">
           {navigation.map((section, index) => (
             <NavSection
               key={index}
               section={section}
               collapsed={false}
-              accentColor={theme.accent}
-              accentRgb={theme.accentRgb}
+              theme={theme}
               onNavigate={onClose}
             />
           ))}
         </nav>
 
-        {/* Schedule Button (Mobile) */}
-        <div className="px-4 pb-4">
+        {/* Mobile Quick Action */}
+        <div className="px-3 pb-3">
           <button
             onClick={handleScheduleClick}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
-            style={{
-              background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}dd 100%)`,
-            }}>
+            className={`
+              w-full flex items-center justify-center gap-2 
+              px-4 py-3 rounded-xl font-semibold text-white 
+              shadow-lg transition-all duration-300 active:scale-95
+              bg-gradient-to-r ${theme.gradient}
+            `}>
             <Calendar size={20} strokeWidth={2.5} />
             <span>Schedule</span>
           </button>
         </div>
 
         {/* Mobile Footer */}
-        <div className="px-4 py-4 border-t border-gray-200/80">
+        <div className="px-4 py-3 border-t border-gray-200">
           <div className="text-xs text-gray-400 font-medium">
-            © 2026 SSMS - Smart School System
+            © {new Date().getFullYear()} SSMS - Smart School System
           </div>
         </div>
       </aside>
