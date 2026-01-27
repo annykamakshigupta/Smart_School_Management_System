@@ -83,7 +83,7 @@ const TeachersPage = () => {
         <div className="flex items-center gap-3">
           <Avatar
             icon={<UserOutlined />}
-            className="bg-blue-100 text-blue-600"
+            className="bg-blue-100 text-blue-400"
           />
           <div>
             <div className="font-medium">{text}</div>

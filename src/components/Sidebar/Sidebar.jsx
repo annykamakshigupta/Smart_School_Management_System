@@ -67,7 +67,7 @@ const NAVIGATION_CONFIG = {
         {
           key: "assignments",
           label: "Teacher Assign",
-          path: "/admin/assignments",
+          path: "/admin/academics/teacher-assignments",
           icon: UserCircle,
         },
       ],
@@ -270,7 +270,7 @@ const NAVIGATION_CONFIG = {
         {
           key: "child",
           label: "My Children",
-          path: "/parent/child",
+          path: "/parent/children",
           icon: UserCircle,
         },
         {
@@ -324,9 +324,9 @@ const ROLE_THEMES = {
   },
   teacher: {
     primary: "#2563eb",
-    gradient: "from-blue-600 to-blue-700",
+    gradient: "from-blue-400 to-blue-700",
     light: "bg-blue-50",
-    text: "text-blue-600",
+    text: "text-blue-400",
   },
   student: {
     primary: "#059669",

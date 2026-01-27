@@ -187,7 +187,7 @@ const ScheduleDetailModal = ({
           {/* Header with gradient background */}
           <div
             className={`
-              relative px-6 pt-6 pb-16 bg-gradient-to-br ${config.bgGradient}
+              relative px-6 pt-6 pb-16 bg-linear-to-br ${config.bgGradient}
             `}>
             {/* Close Button */}
             <button

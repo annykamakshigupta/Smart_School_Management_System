@@ -125,7 +125,7 @@ const GradeSubmissionModal = ({
                       <a
                         href={file.fileUrl}
                         download
-                        className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                        className="text-sm text-blue-400 hover:text-blue-700 font-medium">
                         Download
                       </a>
                     </div>
@@ -216,7 +216,7 @@ const GradeSubmissionModal = ({
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2">
+              className="px-6 py-2.5 bg-blue-400 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2">
               {isLoading ? "Submitting..." : "Submit Grade"}
             </button>
           </div>

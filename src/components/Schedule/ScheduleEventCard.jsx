@@ -26,7 +26,7 @@ const EVENT_CONFIG = {
     borderColor: "border-l-blue-400",
     textColor: "text-blue-700",
     iconBg: "bg-blue-100",
-    iconColor: "text-blue-600",
+    iconColor: "text-blue-400",
     badgeBg: "bg-blue-100",
     badgeText: "text-blue-700",
   },

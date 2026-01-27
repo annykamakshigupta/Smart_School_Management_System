@@ -119,7 +119,7 @@ export const teacherNavigation = [
       {
         key: "assignments",
         label: "Assignments",
-        path: "/teacher/grades/assignments",
+        path: "/teacher/assignments",
       },
       { key: "grades", label: "Enter Grades", path: "/teacher/grades/enter" },
       { key: "results", label: "Results", path: "/teacher/grades/results" },
@@ -176,7 +176,7 @@ export const studentNavigation = [
       {
         key: "assignments",
         label: "Assignments",
-        path: "/student/academics/assignments",
+        path: "/student/assignments",
       },
       { key: "results", label: "Results", path: "/student/academics/results" },
     ],

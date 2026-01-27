@@ -142,7 +142,7 @@ const FileUploader = ({
           `}>
             <Upload
               size={32}
-              className={isDragging ? "text-blue-600" : "text-gray-600"}
+              className={isDragging ? "text-blue-400" : "text-gray-600"}
             />
           </div>
 
@@ -151,7 +151,7 @@ const FileUploader = ({
               {isDragging ? "Drop files here" : "Drag & drop files here"}
             </p>
             <p className="text-sm text-gray-500">
-              or <span className="text-blue-600 font-medium">browse files</span>
+              or <span className="text-blue-400 font-medium">browse files</span>
             </p>
           </div>
 

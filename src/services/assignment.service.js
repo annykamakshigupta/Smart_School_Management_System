@@ -347,3 +347,89 @@ export default {
   // File
   uploadFile,
 };
+
+// ============= ADMIN SERVICES =============
+
+export const getAdminAssignments = async (filters = {}) => {
+  try {
+    const params = new URLSearchParams();
+    if (filters.status) params.append("status", filters.status);
+    if (filters.class) params.append("class", filters.class);
+    if (filters.subject) params.append("subject", filters.subject);
+    if (filters.teacher) params.append("teacher", filters.teacher);
+    if (filters.dateFrom) params.append("dateFrom", filters.dateFrom);
+    if (filters.dateTo) params.append("dateTo", filters.dateTo);
+    if (filters.search) params.append("search", filters.search);
+    if (filters.page) params.append("page", filters.page);
+    if (filters.limit) params.append("limit", filters.limit);
+
+    const url = params.toString()
+      ? `${API_URL}/admin/assignments?${params}`
+      : `${API_URL}/admin/assignments`;
+
+    const response = await axios.get(url, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error fetching admin assignments",
+    );
+  }
+};
+
+export const adminCreateAssignment = async (assignmentData) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/admin/assignments`,
+      assignmentData,
+      getAuthHeaders(),
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error creating admin assignment",
+    );
+  }
+};
+
+export const getAdminAssignmentById = async (id) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/admin/assignments/${id}`,
+      getAuthHeaders(),
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error fetching admin assignment",
+    );
+  }
+};
+
+export const adminUpdateAssignment = async (id, assignmentData) => {
+  try {
+    const response = await axios.put(
+      `${API_URL}/admin/assignments/${id}`,
+      assignmentData,
+      getAuthHeaders(),
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error updating admin assignment",
+    );
+  }
+};
+
+export const adminDeleteAssignment = async (id) => {
+  try {
+    const response = await axios.delete(
+      `${API_URL}/admin/assignments/${id}`,
+      getAuthHeaders(),
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error deleting admin assignment",
+    );
+  }
+};

@@ -1,6 +1,7 @@
 /**
  * ChildSchedulePage - Parent's View of Child's Schedule
  * Modern, responsive schedule display for parents to view their children's timetables
+ * Updated to match Admin and Student schedule design patterns
  */
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -16,8 +17,10 @@ import {
 import { ScheduleView } from "../../../components/Schedule";
 import scheduleService from "../../../services/schedule.service";
 import { useAuth } from "../../../hooks/useAuth";
+import { getMyChildren } from "../../../services/parent.service";
+import { useSearchParams } from "react-router-dom";
 
-// Stat Card Component
+// Stat Card Component - Modern design
 const StatCard = ({ icon: Icon, label, value, color, subtext }) => {
   const colorClasses = {
     indigo: {
@@ -35,6 +38,14 @@ const StatCard = ({ icon: Icon, label, value, color, subtext }) => {
     amber: {
       iconBg: "bg-amber-100",
       iconColor: "text-amber-600",
+    },
+    blue: {
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-400",
+    },
+    rose: {
+      iconBg: "bg-rose-100",
+      iconColor: "text-rose-600",
     },
   };
 
@@ -57,7 +68,7 @@ const StatCard = ({ icon: Icon, label, value, color, subtext }) => {
   );
 };
 
-// Child Selector Component
+// Child Selector Component - Enhanced modern design
 const ChildSelector = ({ children, selectedChild, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,22 +77,22 @@ const ChildSelector = ({ children, selectedChild, onSelect }) => {
   }
 
   const selected = children.find((c) => c._id === selectedChild) || children[0];
+  const selectedName =
+    selected?.userId?.name || selected?.name || "Select Child";
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition-colors min-w-[200px]">
-        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
-          <Users className="w-4 h-4 text-indigo-600" />
+        className="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:shadow-md transition-all min-w-55">
+        <div className="w-9 h-9 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-sm">
+          <GraduationCap className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 text-left">
-          <p className="text-sm font-medium text-slate-800">
-            {selected?.name || "Select Child"}
-          </p>
+          <p className="text-sm font-semibold text-slate-800">{selectedName}</p>
           <p className="text-xs text-slate-500">
-            {selected?.classId?.name || "Class"} -{" "}
-            {selected?.section || "Section"}
+            {selected?.classId?.name || "Class"} - Section{" "}
+            {selected?.section || "-"}
           </p>
         </div>
         <ChevronDown
@@ -95,42 +106,47 @@ const ChildSelector = ({ children, selectedChild, onSelect }) => {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-hidden">
-            {children.map((child) => (
-              <button
-                key={child._id}
-                onClick={() => {
-                  onSelect(child._id);
-                  setIsOpen(false);
-                }}
-                className={`
-                  w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors
-                  ${child._id === selectedChild ? "bg-indigo-50" : ""}
+          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden">
+            {children.map((child) => {
+              const isSelected = child._id === selectedChild;
+              return (
+                <button
+                  key={child._id}
+                  onClick={() => {
+                    onSelect(child._id);
+                    setIsOpen(false);
+                  }}
+                  className={`
+                  w-full flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0
+                  ${isSelected ? "bg-indigo-50" : ""}
                 `}>
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    child._id === selectedChild
-                      ? "bg-indigo-100"
-                      : "bg-slate-100"
-                  }`}>
-                  <Users
-                    className={`w-4 h-4 ${child._id === selectedChild ? "text-indigo-600" : "text-slate-500"}`}
-                  />
-                </div>
-                <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-slate-800">
-                    {child.name}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    {child.classId?.name || "Class"} - Section{" "}
-                    {child.section || "-"}
-                  </p>
-                </div>
-                {child._id === selectedChild && (
-                  <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                )}
-              </button>
-            ))}
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm ${
+                      isSelected
+                        ? "bg-linear-to-br from-indigo-500 to-purple-600"
+                        : "bg-slate-100"
+                    }`}>
+                    <GraduationCap
+                      className={`w-5 h-5 ${isSelected ? "text-white" : "text-slate-500"}`}
+                    />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p
+                      className={`text-sm font-medium ${isSelected ? "text-indigo-900" : "text-slate-800"}`}>
+                      {child?.userId?.name || child?.name || "Student"}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {child.classId?.name || "Class"} - Section{" "}
+                      {child.section || "-"}
+                      {child.rollNumber && ` • Roll: ${child.rollNumber}`}
+                    </p>
+                  </div>
+                  {isSelected && (
+                    <div className="w-2 h-2 rounded-full bg-indigo-600 shadow-sm" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </>
       )}
@@ -140,6 +156,7 @@ const ChildSelector = ({ children, selectedChild, onSelect }) => {
 
 const ChildSchedulePage = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [children, setChildren] = useState([]);
   const [selectedChild, setSelectedChild] = useState(null);
   const [scheduleData, setScheduleData] = useState({
@@ -157,33 +174,44 @@ const ChildSchedulePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch parent's children
+  const EMPTY_GROUPED = useMemo(
+    () => ({
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+      Sunday: [],
+    }),
+    [],
+  );
+
+  // Fetch parent's linked children
   useEffect(() => {
-    const fetchChildren = async () => {
+    const loadChildren = async () => {
       try {
-        // This would call the parent service to get linked children
-        // For now, we'll use a placeholder
-        const response = await fetch("/api/parents/children", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("ssms_token")}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setChildren(data.data || []);
-          if (data.data?.length > 0) {
-            setSelectedChild(data.data[0]._id);
-          }
+        const res = await getMyChildren();
+        const list = res.data || [];
+        setChildren(list);
+
+        const preselected = searchParams.get("child");
+        const hasPreselected =
+          preselected && list.some((c) => c._id === preselected);
+        if (hasPreselected) {
+          setSelectedChild(preselected);
+        } else if (list.length > 0) {
+          setSelectedChild(list[0]._id);
         }
       } catch (err) {
         console.error("Failed to fetch children:", err);
+        setChildren([]);
+        setSelectedChild(null);
       }
     };
 
-    if (user) {
-      fetchChildren();
-    }
-  }, [user]);
+    if (user) loadChildren();
+  }, [user, searchParams]);
 
   // Fetch schedule for selected child
   const fetchSchedule = async () => {
@@ -196,11 +224,21 @@ const ChildSchedulePage = () => {
       setLoading(true);
       setError(null);
 
-      // This would fetch the schedule for the specific child
-      const response = await scheduleService.getStudentSchedules({
-        studentId: selectedChild,
-      });
-      setScheduleData(response.data);
+      // Parent schedule endpoint returns schedules for all linked children
+      const response = await scheduleService.getParentSchedules();
+      const childrenSchedules = response.data?.children || [];
+      const match = childrenSchedules.find(
+        (c) => c?.student?._id === selectedChild,
+      );
+
+      if (match) {
+        setScheduleData({
+          items: match.items || [],
+          groupedByDay: match.groupedByDay || EMPTY_GROUPED,
+        });
+      } else {
+        setScheduleData({ items: [], groupedByDay: EMPTY_GROUPED });
+      }
     } catch (err) {
       setError(err.message || "Failed to fetch schedule");
     } finally {
@@ -265,6 +303,8 @@ const ChildSchedulePage = () => {
   }, [scheduleData.items]);
 
   const selectedChildData = children.find((c) => c._id === selectedChild);
+  const selectedChildName =
+    selectedChildData?.userId?.name || selectedChildData?.name || "";
 
   return (
     <div className="space-y-6 p-1">
@@ -275,7 +315,8 @@ const ChildSchedulePage = () => {
             Child's Schedule
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            View your child's weekly class timetable
+            View your child's weekly class timetable and monitor their academic
+            schedule
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -289,28 +330,41 @@ const ChildSchedulePage = () => {
           <button
             onClick={fetchSchedule}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50">
+            className="flex items-center gap-2 px-5 py-3 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-all disabled:opacity-50 shadow-lg shadow-indigo-200">
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </button>
         </div>
       </div>
 
       {/* Child Info Banner */}
       {selectedChildData && (
-        <div className="bg-gradient-to-r from-indigo-500 to-violet-600 rounded-2xl p-6 text-white">
+        <div className="bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-6 text-white shadow-lg">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center">
-              <GraduationCap className="w-7 h-7" />
+            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 shadow-xl">
+              <GraduationCap className="w-8 h-8" />
             </div>
-            <div>
-              <h2 className="text-xl font-bold">{selectedChildData.name}</h2>
-              <p className="text-white/80 text-sm">
-                {selectedChildData.classId?.name || "Class"} - Section{" "}
-                {selectedChildData.section || "-"}
-                {selectedChildData.rollNumber &&
-                  ` • Roll No: ${selectedChildData.rollNumber}`}
-              </p>
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold mb-1">{selectedChildName}</h2>
+              <div className="flex flex-wrap gap-4 text-white/90 text-sm">
+                <span className="flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4" />
+                  {selectedChildData.classId?.name || "Class"} - Section{" "}
+                  {selectedChildData.section || "-"}
+                </span>
+                {selectedChildData.rollNumber && (
+                  <span className="flex items-center gap-1.5">
+                    <Users className="w-4 h-4" />
+                    Roll No: {selectedChildData.rollNumber}
+                  </span>
+                )}
+                {selectedChildData.academicYear && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4" />
+                    {selectedChildData.academicYear}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -323,14 +377,14 @@ const ChildSchedulePage = () => {
           label="Total Classes"
           value={stats.totalClasses}
           color="indigo"
-          subtext="Per week"
+          subtext="Classes per week"
         />
         <StatCard
           icon={Calendar}
           label="School Days"
           value={stats.schoolDays}
           color="emerald"
-          subtext="Days per week"
+          subtext="Active days"
         />
         <StatCard
           icon={Clock}
@@ -365,7 +419,7 @@ const ChildSchedulePage = () => {
         emptySubtitle={
           children.length === 0
             ? "Please contact the school administrator to link your child's account."
-            : "The timetable for your child will appear here once it's published."
+            : "The timetable for your child will appear here once it's published by the school."
         }
         showFilters={true}
         showSearch={true}

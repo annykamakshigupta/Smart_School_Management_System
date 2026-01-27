@@ -45,7 +45,6 @@ const ScheduleFormModal = ({
     const token = localStorage.getItem("ssms_token");
 
     if (!token) {
-
       setLoading(false);
       return;
     }
@@ -186,7 +185,7 @@ const ScheduleFormModal = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {loading ? (
             <div className="flex justify-center items-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -403,7 +402,7 @@ const ScheduleFormModal = ({
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              className="px-6 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               Submit
             </button>
           </div>

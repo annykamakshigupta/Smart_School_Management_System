@@ -16,12 +16,14 @@ import {
   getCurrentMonthRange,
 } from "../../../services/attendance.service";
 import { getAllSubjects } from "../../../services/subject.service";
-import { getUsersByRole } from "../../../services/user.service";
+import { getMyChildren } from "../../../services/parent.service";
 import dayjs from "dayjs";
+import { useSearchParams } from "react-router-dom";
 
 const { RangePicker } = DatePicker;
 
 const ParentChildAttendancePage = () => {
+  const [searchParams] = useSearchParams();
   const [children, setChildren] = useState([]);
   const [selectedChild, setSelectedChild] = useState(null);
   const [attendance, setAttendance] = useState([]);
@@ -47,14 +49,17 @@ const ParentChildAttendancePage = () => {
 
   const fetchChildren = async () => {
     try {
-      // In a real app, you'd fetch children linked to this parent
-      // For now, we'll get all students
-      const response = await getUsersByRole("student");
-      setChildren(response.data || []);
+      const response = await getMyChildren();
+      const list = response.data || [];
+      setChildren(list);
 
-      // Auto-select first child if available
-      if (response.data && response.data.length > 0) {
-        setSelectedChild(response.data[0]._id);
+      const preselected = searchParams.get("child");
+      const hasPreselected =
+        preselected && list.some((c) => c._id === preselected);
+      if (hasPreselected) {
+        setSelectedChild(preselected);
+      } else if (list.length > 0) {
+        setSelectedChild(list[0]._id);
       }
     } catch (error) {
       message.error("Error fetching children");
@@ -100,7 +105,7 @@ const ParentChildAttendancePage = () => {
   };
 
   const selectedChildInfo = children.find(
-    (child) => child._id === selectedChild
+    (child) => child._id === selectedChild,
   );
 
   return (
@@ -126,19 +131,26 @@ const ParentChildAttendancePage = () => {
                 className="w-full"
                 showSearch
                 filterOption={(input, option) =>
-                  option.children.toLowerCase().includes(input.toLowerCase())
+                  (option?.children?.toString() || "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
                 }>
                 {children.map((child) => (
                   <Select.Option key={child._id} value={child._id}>
-                    {child.name} ({child.email})
+                    {(child.userId?.name || child.name || "Student") +
+                      (child.userId?.email ? ` (${child.userId.email})` : "")}
                   </Select.Option>
                 ))}
               </Select>
             </div>
             {selectedChildInfo && (
               <div className="text-sm text-gray-600">
-                <div className="font-medium">{selectedChildInfo.name}</div>
-                <div>{selectedChildInfo.email}</div>
+                <div className="font-medium">
+                  {selectedChildInfo.userId?.name ||
+                    selectedChildInfo.name ||
+                    "Student"}
+                </div>
+                <div>{selectedChildInfo.userId?.email || ""}</div>
               </div>
             )}
           </div>

@@ -44,7 +44,7 @@ const AttendancePage = () => {
 
   const handleStatusChange = (studentId, status) => {
     setStudents((prev) =>
-      prev.map((s) => (s.id === studentId ? { ...s, status } : s))
+      prev.map((s) => (s.id === studentId ? { ...s, status } : s)),
     );
   };
 
@@ -101,7 +101,7 @@ const AttendancePage = () => {
           <Avatar
             icon={<UserOutlined />}
             size="small"
-            className="bg-blue-100 text-blue-600"
+            className="bg-blue-100 text-blue-400"
           />
           <span>{text}</span>
         </div>
@@ -223,7 +223,7 @@ const AttendancePage = () => {
       {/* Attendance Table */}
       <Card
         title={`Class ${selectedClass} - ${selectedDate.format(
-          "MMMM DD, YYYY"
+          "MMMM DD, YYYY",
         )}`}
         extra={
           <Button

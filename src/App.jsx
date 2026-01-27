@@ -23,6 +23,7 @@ import { UnauthorizedPage, NotFoundPage } from "./pages";
 // Feature Pages - Admin
 import {
   AdminDashboard,
+  AdminAssignmentsPage,
   TeachersPage,
   StudentsPage,
   ParentsPage,
@@ -54,12 +55,18 @@ import {
   StudentAssignmentsPage,
 } from "./features/student";
 
+// Assignment Detail Pages
+import TeacherAssignmentDetailPage from "./features/teacher/pages/TeacherAssignmentDetailPage";
+import StudentAssignmentDetailPage from "./features/student/pages/StudentAssignmentDetailPage";
+
 // Feature Pages - Parent
 import {
   ParentDashboard,
   MyChildrenPage,
   FeePaymentPage,
   ParentChildAttendancePage,
+  ChildSchedulePage,
+  ChildDetailsPage,
 } from "./features/parent";
 
 // Styles
@@ -144,6 +151,10 @@ function App() {
                   />
                   <Route
                     path="/admin/assignments"
+                    element={<AdminAssignmentsPage />}
+                  />
+                  <Route
+                    path="/admin/academics/teacher-assignments"
                     element={<ClassSubjectAssignmentPage />}
                   />
 
@@ -216,6 +227,10 @@ function App() {
                     element={<TeacherAssignmentsPage />}
                   />
                   <Route
+                    path="/teacher/assignments/:id"
+                    element={<TeacherAssignmentDetailPage />}
+                  />
+                  <Route
                     path="/teacher/grades/enter"
                     element={<PlaceholderPage title="Enter Grades" />}
                   />
@@ -278,6 +293,10 @@ function App() {
                     element={<StudentAssignmentsPage />}
                   />
                   <Route
+                    path="/student/assignments/:id"
+                    element={<StudentAssignmentDetailPage />}
+                  />
+                  <Route
                     path="/student/academics/results"
                     element={<PlaceholderPage title="Results" />}
                   />
@@ -317,7 +336,11 @@ function App() {
                   <Route path="/parent/children" element={<MyChildrenPage />} />
                   <Route
                     path="/parent/children/:id"
-                    element={<PlaceholderPage title="Child Details" />}
+                    element={<ChildDetailsPage />}
+                  />
+                  <Route
+                    path="/parent/child-schedule"
+                    element={<ChildSchedulePage />}
                   />
                   {/* Performance */}
                   {/* Performance */}

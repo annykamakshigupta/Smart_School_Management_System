@@ -29,7 +29,7 @@ const AuthPage = () => {
     try {
       const result = await login(values);
       if (result.success) {
-        message.success("Login successful! Redirecting...");
+        message.success(`Login successful!`);
       } else {
         message.error(result.error || "Login failed");
       }
@@ -213,15 +213,6 @@ const AuthPage = () => {
                 </p>
               </div>
 
-              {/* Alert Messages */}
-              {redirectMessage && (
-                <Alert
-                  message={redirectMessage}
-                  type="info"
-                  showIcon
-                  className="mb-6 rounded-xl border-indigo-200 bg-indigo-50"
-                />
-              )}
               {error && (
                 <Alert
                   message={error}

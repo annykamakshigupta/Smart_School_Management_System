@@ -15,7 +15,7 @@ const StatCard = ({ icon: Icon, label, value, color, subtext }) => {
     blue: {
       bg: "bg-blue-50",
       iconBg: "bg-blue-100",
-      iconColor: "text-blue-600",
+      iconColor: "text-blue-400",
       ring: "ring-blue-100",
     },
     emerald: {

@@ -40,7 +40,7 @@ const AssignmentCard = ({ assignment, onClick, viewMode = "teacher" }) => {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-400 transition-colors">
             {assignment.title}
           </h3>
           <div className="flex flex-wrap gap-2 items-center">

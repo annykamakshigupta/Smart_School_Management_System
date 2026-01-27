@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { FileUploader, RichTextEditor } from "../UI";
+import { FileUploader } from "../UI";
+import { uploadFile } from "../../services/assignment.service";
 
 const CreateAssignmentModal = ({
   isOpen,
@@ -8,6 +9,8 @@ const CreateAssignmentModal = ({
   onSubmit,
   classes = [],
   subjects = [],
+  teachers = [],
+  isAdmin = false,
   initialData = null,
   isLoading = false,
 }) => {
@@ -17,6 +20,7 @@ const CreateAssignmentModal = ({
       description: "",
       subject: "",
       class: "",
+      teacher: "",
       totalMarks: "",
       dueDate: "",
       attachments: [],
@@ -67,6 +71,10 @@ const CreateAssignmentModal = ({
       newErrors.class = "Class is required";
     }
 
+    if (isAdmin && !formData.teacher) {
+      newErrors.teacher = "Teacher is required";
+    }
+
     if (!formData.totalMarks || formData.totalMarks < 1) {
       newErrors.totalMarks = "Total marks must be at least 1";
     }
@@ -84,18 +92,23 @@ const CreateAssignmentModal = ({
   const handleSubmit = async (status) => {
     if (!validate()) return;
 
+    let attachments = [];
+    if (uploadedFiles.length > 0) {
+      const uploaded = await Promise.all(
+        uploadedFiles.map((file) => uploadFile(file)),
+      );
+      attachments = uploaded
+        .filter((r) => r?.success && r?.data)
+        .map((r) => r.data);
+    }
+
     const submissionData = {
       ...formData,
       status,
-      attachments: uploadedFiles.map((file) => ({
-        fileName: file.name,
-        fileUrl: URL.createObjectURL(file), // This should be replaced with actual upload URL
-        fileType: file.type,
-        fileSize: file.size,
-      })),
+      attachments,
     };
 
-    onSubmit(submissionData);
+    await onSubmit(submissionData);
   };
 
   if (!isOpen) return null;
@@ -150,11 +163,15 @@ const CreateAssignmentModal = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description <span className="text-red-500">*</span>
               </label>
-              <RichTextEditor
+               <input
+                type="text"
+                name="description"
                 value={formData.description}
-                onChange={handleDescriptionChange}
+                onChange={handleChange}
                 placeholder="Enter assignment description, instructions, and requirements..."
-                minHeight="150px"
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                  errors.description ? "border-red-500" : "border-gray-300"
+                }`}
               />
               {errors.description && (
                 <p className="text-red-500 text-sm mt-1">
@@ -211,6 +228,33 @@ const CreateAssignmentModal = ({
                 )}
               </div>
             </div>
+
+            {/* Teacher (Admin only) */}
+            {isAdmin && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Teacher <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="teacher"
+                  value={formData.teacher}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    errors.teacher ? "border-red-500" : "border-gray-300"
+                  }`}>
+                  <option value="">Select Teacher</option>
+                  {teachers.map((t) => (
+                    <option key={t.userId} value={t.userId}>
+                      {t.name}
+                      {t.email ? ` (${t.email})` : ""}
+                    </option>
+                  ))}
+                </select>
+                {errors.teacher && (
+                  <p className="text-red-500 text-sm mt-1">{errors.teacher}</p>
+                )}
+              </div>
+            )}
 
             {/* Total Marks and Due Date */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -288,7 +332,7 @@ const CreateAssignmentModal = ({
               type="button"
               onClick={() => handleSubmit("published")}
               disabled={isLoading}
-              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
+              className="px-6 py-2.5 bg-blue-400 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
               {isLoading ? "Publishing..." : "Publish Assignment"}
             </button>
           </div>

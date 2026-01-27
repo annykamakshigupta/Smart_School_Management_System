@@ -15,30 +15,13 @@ const getAuthHeaders = () => {
 };
 
 /**
- * Get current parent's profile ID from storage
- */
-const getParentProfileId = () => {
-  const userData = localStorage.getItem("ssms_user");
-  if (!userData) {
-    throw new Error("User not authenticated");
-  }
-  const user = JSON.parse(userData);
-  // roleProfile contains the parent profile data with _id
-  if (user.roleProfile && user.roleProfile._id) {
-    return user.roleProfile._id;
-  }
-  throw new Error("Parent profile not found");
-};
-
-/**
  * Get current parent's children
- * Auto-fetches based on logged-in parent's profile ID
+ * Server resolves parent via JWT (no admin route)
  */
 export const getMyChildren = async () => {
   try {
-    const parentId = getParentProfileId();
     const response = await axios.get(
-      `${API_URL}/admin/parents/${parentId}/children`,
+      `${API_URL}/parents/me/children`,
       getAuthHeaders(),
     );
     return response.data;
@@ -58,7 +41,7 @@ export const getChildAttendance = async (studentId, filters = {}) => {
     params.append("studentId", studentId);
 
     const response = await axios.get(
-      `${API_URL}/attendance?${params}`,
+      `${API_URL}/attendance/student?${params}`,
       getAuthHeaders(),
     );
     return response.data;

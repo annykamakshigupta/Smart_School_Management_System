@@ -354,7 +354,7 @@ const StudentEnrollmentPage = () => {
           <Card size="small">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <TeamOutlined className="text-blue-600 text-lg" />
+                <TeamOutlined className="text-blue-400 text-lg" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{parents.length}</div>

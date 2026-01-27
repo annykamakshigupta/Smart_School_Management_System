@@ -26,8 +26,8 @@ const ConfirmModal = ({
       icon: AlertTriangle,
     },
     info: {
-      bgColor: "bg-blue-600 hover:bg-blue-700",
-      iconColor: "text-blue-600",
+      bgColor: "bg-blue-400 hover:bg-blue-700",
+      iconColor: "text-blue-400",
       icon: AlertTriangle,
     },
   };

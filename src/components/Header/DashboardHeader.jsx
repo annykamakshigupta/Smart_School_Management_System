@@ -30,7 +30,7 @@ const ROLE_CONFIG = {
   teacher: {
     label: "Teacher",
     badge: "bg-blue-50 text-blue-700 border-blue-200",
-    avatar: "from-blue-500 to-blue-600",
+    avatar: "from-blue-500 to-blue-400",
   },
   student: {
     label: "Student",

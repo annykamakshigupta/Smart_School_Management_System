@@ -162,7 +162,7 @@ const AdminAttendancePage = () => {
               <StatCard
                 title="Total Records"
                 value={summary.totalRecords}
-                iconColor="bg-blue-100 text-blue-600"
+                iconColor="bg-blue-100 text-blue-400"
               />
             </Col>
             <Col xs={24} sm={12} lg={6}>

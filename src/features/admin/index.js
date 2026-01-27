@@ -13,6 +13,7 @@ export { default as SchedulesPage } from "./pages/SchedulesPage";
 export { default as ClassesPage } from "./pages/ClassesPage";
 export { default as SubjectsPage } from "./pages/SubjectsPage";
 export { default as AdminAttendancePage } from "./pages/AdminAttendancePage";
+export { default as AdminAssignmentsPage } from "./pages/AdminAssignmentsPage";
 
 // User Management Module
 export { default as UserManagementPage } from "./pages/UserManagementPage";

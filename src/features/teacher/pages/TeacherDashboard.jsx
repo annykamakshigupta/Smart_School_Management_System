@@ -119,8 +119,8 @@ const TeacherDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-100">
-        <Spin size="large" />
+      <div className="flex items-center justify-center min-h-screen">
+        <Spin size="large" tip="Loading dashboard..." />
       </div>
     );
   }
@@ -128,54 +128,96 @@ const TeacherDashboard = () => {
   const todaySchedule = getTodaySchedule();
 
   return (
-    <div>
-      <PageHeader
-        title="Dashboard"
-        subtitle="Welcome back! Here's your overview for today."
-        action={
-          <Button
-            type="primary"
-            icon={<CheckCircleOutlined />}
-            size="large"
-            onClick={() => navigate("/teacher/attendance?mark=1")}>
-            Mark Attendance
-          </Button>
-        }
-      />
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">
+              Welcome Back, Teacher! 🎓
+            </h1>
+            <p className="text-indigo-100 text-lg">
+              Here's your overview for today
+            </p>
+          </div>
+          <div className="hidden md:flex items-center gap-4">
+            <Button
+              type="primary"
+              size="large"
+              icon={<CheckCircleOutlined />}
+              onClick={() => navigate("/teacher/attendance?mark=1")}
+              className="bg-white/20 hover:bg-white/30 border-white/30 backdrop-blur-sm">
+              Mark Attendance
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Stats */}
       <Row gutter={[16, 16]} className="mb-6">
         <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="My Students"
-            value={teacherData.totalStudents}
-            icon={TeamOutlined}
-            iconColor="bg-blue-100 text-blue-600"
-          />
+          <div className="bg-linear-to-br from-blue-500 to-blue-400 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                <TeamOutlined className="text-3xl" />
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-1 text-xs font-semibold">
+                Total
+              </div>
+            </div>
+            <h3 className="text-4xl font-bold mb-1">
+              {teacherData.totalStudents}
+            </h3>
+            <p className="text-blue-100 text-sm font-medium">My Students</p>
+          </div>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Classes Today"
-            value={todaySchedule.length}
-            icon={CalendarOutlined}
-            iconColor="bg-green-100 text-green-600"
-          />
+          <div className="bg-linear-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                <CalendarOutlined className="text-3xl" />
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-1 text-xs font-semibold">
+                Today
+              </div>
+            </div>
+            <h3 className="text-4xl font-bold mb-1">{todaySchedule.length}</h3>
+            <p className="text-green-100 text-sm font-medium">Classes Today</p>
+          </div>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Assigned Classes"
-            value={teacherData.assignedClasses.length}
-            icon={HomeOutlined}
-            iconColor="bg-yellow-100 text-yellow-600"
-          />
+          <div className="bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                <HomeOutlined className="text-3xl" />
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-1 text-xs font-semibold">
+                Active
+              </div>
+            </div>
+            <h3 className="text-4xl font-bold mb-1">
+              {teacherData.assignedClasses.length}
+            </h3>
+            <p className="text-amber-100 text-sm font-medium">
+              Assigned Classes
+            </p>
+          </div>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Subjects"
-            value={teacherData.assignedSubjects.length}
-            icon={BookOutlined}
-            iconColor="bg-purple-100 text-purple-600"
-          />
+          <div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                <BookOutlined className="text-3xl" />
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-1 text-xs font-semibold">
+                Teaching
+              </div>
+            </div>
+            <h3 className="text-4xl font-bold mb-1">
+              {teacherData.assignedSubjects.length}
+            </h3>
+            <p className="text-purple-100 text-sm font-medium">My Subjects</p>
+          </div>
         </Col>
       </Row>
 
@@ -183,7 +225,7 @@ const TeacherDashboard = () => {
         {/* Class Teacher Status */}
         {teacherData.classTeacherOf.length > 0 && (
           <Col xs={24}>
-            <Card className="mb-4">
+            <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
               <div className="bg-linear-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
                 <div className="flex items-center gap-3 mb-4">
                   <IdcardOutlined className="text-2xl" />
@@ -211,17 +253,22 @@ const TeacherDashboard = () => {
         <Col xs={24} lg={12}>
           <Card
             title={
-              <span className="flex items-center gap-2">
-                <CalendarOutlined className="text-green-600" />
-                Today's Schedule
-              </span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <CalendarOutlined className="text-green-600" />
+                </div>
+                <span className="font-bold">Today's Schedule</span>
+              </div>
             }
             extra={
-              <Link to="/teacher/schedule" className="text-indigo-600">
+              <Link
+                to="/teacher/schedule"
+                className="text-indigo-600 hover:text-indigo-800 font-semibold">
                 View Full
               </Link>
             }
-            loading={scheduleLoading}>
+            loading={scheduleLoading}
+            className="shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
             {todaySchedule.length > 0 ? (
               <List
                 dataSource={todaySchedule}
@@ -259,16 +306,21 @@ const TeacherDashboard = () => {
         <Col xs={24} lg={12}>
           <Card
             title={
-              <span className="flex items-center gap-2">
-                <HomeOutlined className="text-blue-600" />
-                My Classes
-              </span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <HomeOutlined className="text-blue-400" />
+                </div>
+                <span className="font-bold">My Classes</span>
+              </div>
             }
             extra={
-              <Link to="/teacher/classes" className="text-indigo-600">
+              <Link
+                to="/teacher/classes"
+                className="text-indigo-600 hover:text-indigo-800 font-semibold">
                 View All
               </Link>
-            }>
+            }
+            className="shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
             {teacherData.assignedClasses.length > 0 ? (
               <List
                 dataSource={teacherData.assignedClasses}
@@ -277,7 +329,7 @@ const TeacherDashboard = () => {
                     <div className="flex items-center gap-3">
                       <Avatar
                         icon={<TeamOutlined />}
-                        className="bg-blue-100 text-blue-600"
+                        className="bg-blue-100 text-blue-400"
                       />
                       <div>
                         <div className="font-medium">{cls.name || cls}</div>
@@ -302,11 +354,14 @@ const TeacherDashboard = () => {
         <Col xs={24} md={12}>
           <Card
             title={
-              <span className="flex items-center gap-2">
-                <BookOutlined className="text-purple-600" />
-                My Subjects
-              </span>
-            }>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <BookOutlined className="text-purple-600" />
+                </div>
+                <span className="font-bold">My Subjects</span>
+              </div>
+            }
+            className="shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
             {teacherData.assignedSubjects.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {teacherData.assignedSubjects.map((subject, index) => (
@@ -327,38 +382,59 @@ const TeacherDashboard = () => {
 
         {/* Quick Actions */}
         <Col xs={24} md={12}>
-          <Card title="Quick Actions">
+          <Card
+            title={
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                  <CalendarOutlined className="text-indigo-600" />
+                </div>
+                <span className="font-bold">Quick Actions</span>
+              </div>
+            }
+            className="shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
             <div className="grid grid-cols-2 gap-4">
               <Link to="/teacher/attendance">
-                <div className="p-4 bg-green-50 rounded-xl text-center hover:bg-green-100 transition-all hover:shadow-md cursor-pointer">
-                  <CheckCircleOutlined className="text-3xl text-green-600 mb-2" />
-                  <div className="font-medium text-gray-900">
+                <div className="group p-5 bg-linear-to-br from-green-50 to-green-100 rounded-2xl text-center hover:from-green-100 hover:to-green-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-green-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <CheckCircleOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="font-bold text-slate-800 mb-1">
                     Mark Attendance
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-slate-600">
                     Take class attendance
                   </div>
                 </div>
               </Link>
               <Link to="/teacher/assignments">
-                <div className="p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-all hover:shadow-md cursor-pointer">
-                  <FileTextOutlined className="text-3xl text-blue-600 mb-2" />
-                  <div className="font-medium text-gray-900">Assignments</div>
-                  <div className="text-xs text-gray-500">Create & manage</div>
+                <div className="group p-5 bg-linear-to-br from-blue-50 to-blue-100 rounded-2xl text-center hover:from-blue-100 hover:to-blue-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-blue-400 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <FileTextOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="font-bold text-slate-800 mb-1">
+                    Assignments
+                  </div>
+                  <div className="text-xs text-slate-600">Create & manage</div>
                 </div>
               </Link>
               <Link to="/teacher/schedule">
-                <div className="p-4 bg-purple-50 rounded-xl text-center hover:bg-purple-100 transition-all hover:shadow-md cursor-pointer">
-                  <CalendarOutlined className="text-3xl text-purple-600 mb-2" />
-                  <div className="font-medium text-gray-900">Schedule</div>
-                  <div className="text-xs text-gray-500">View timetable</div>
+                <div className="group p-5 bg-linear-to-br from-purple-50 to-purple-100 rounded-2xl text-center hover:from-purple-100 hover:to-purple-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <CalendarOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="font-bold text-slate-800 mb-1">Schedule</div>
+                  <div className="text-xs text-slate-600">View timetable</div>
                 </div>
               </Link>
               <Link to="/teacher/students">
-                <div className="p-4 bg-yellow-50 rounded-xl text-center hover:bg-yellow-100 transition-all hover:shadow-md cursor-pointer">
-                  <TeamOutlined className="text-3xl text-yellow-600 mb-2" />
-                  <div className="font-medium text-gray-900">Students</div>
-                  <div className="text-xs text-gray-500">View all students</div>
+                <div className="group p-5 bg-linear-to-br from-amber-50 to-amber-100 rounded-2xl text-center hover:from-amber-100 hover:to-amber-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-amber-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <TeamOutlined className="text-2xl text-white" />
+                  </div>
+                  <div className="font-bold text-slate-800 mb-1">Students</div>
+                  <div className="text-xs text-slate-600">
+                    View all students
+                  </div>
                 </div>
               </Link>
             </div>

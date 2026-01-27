@@ -148,12 +148,19 @@ const ParentDashboard = () => {
 
   if (children.length === 0) {
     return (
-      <div>
-        <PageHeader
-          title="Parent Dashboard"
-          subtitle="Monitor your children's academic progress"
-        />
-        <Card>
+      <div className="space-y-6">
+        {/* Welcome Header */}
+        <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Parent Dashboard 👨‍👩‍👧‍👦</h1>
+              <p className="text-indigo-100 text-lg">
+                Monitor your children's academic progress
+              </p>
+            </div>
+          </div>
+        </div>
+        <Card className="shadow-lg rounded-2xl border-0">
           <Empty
             description="No children linked to your account yet. Please contact the school administrator."
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -164,11 +171,24 @@ const ParentDashboard = () => {
   }
 
   return (
-    <div>
-      <PageHeader
-        title="Parent Dashboard"
-        subtitle="Monitor your children's academic progress"
-      />
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Parent Dashboard 👨‍👩‍👧‍👦</h1>
+            <p className="text-indigo-100 text-lg">
+              Monitor and support your children's academic journey
+            </p>
+          </div>
+          <div className="hidden md:block">
+            <div className="text-right">
+              <p className="text-sm text-indigo-100">Total Children</p>
+              <p className="text-3xl font-bold">{children.length}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Child Selector */}
       {children.length > 1 && (
@@ -279,71 +299,89 @@ const ParentDashboard = () => {
                 {/* Stats Row */}
                 <Row gutter={[16, 16]} className="mb-6">
                   <Col xs={12} md={6}>
-                    <Card className="text-center hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 mx-auto mb-3 bg-green-100 rounded-full flex items-center justify-center">
-                        <CheckCircleOutlined className="text-2xl text-green-600" />
+                    <div className="bg-linear-to-br from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <CheckCircleOutlined className="text-2xl" />
                       </div>
-                      <Statistic
-                        title="Attendance"
-                        value={calculateAttendanceRate()}
-                        suffix="%"
-                        valueStyle={{ color: "#22c55e" }}
-                      />
-                    </Card>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold mb-1">
+                          {calculateAttendanceRate()}%
+                        </div>
+                        <div className="text-green-100 text-sm">Attendance</div>
+                      </div>
+                    </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <Card className="text-center hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-full flex items-center justify-center">
-                        <BookOutlined className="text-2xl text-blue-600" />
+                    <div className="bg-linear-to-br from-blue-500 to-blue-400 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <BookOutlined className="text-2xl" />
                       </div>
-                      <Statistic
-                        title="Subjects"
-                        value={child.classId?.subjects?.length || 0}
-                        valueStyle={{ color: "#3b82f6" }}
-                      />
-                    </Card>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold mb-1">
+                          {child.classId?.subjects?.length || 0}
+                        </div>
+                        <div className="text-blue-100 text-sm">Subjects</div>
+                      </div>
+                    </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <Card className="text-center hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
-                        <TeamOutlined className="text-2xl text-purple-600" />
+                    <div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <TeamOutlined className="text-2xl" />
                       </div>
-                      <Statistic
-                        title="Class Teacher"
-                        value={child.classId?.classTeacher?.name ? 1 : 0}
-                        formatter={() =>
-                          child.classId?.classTeacher?.name || "Not Assigned"
-                        }
-                        valueStyle={{ fontSize: "14px" }}
-                      />
-                    </Card>
+                      <div className="text-center">
+                        <div className="text-sm font-bold mb-1 truncate">
+                          {child.classId?.classTeacher?.userId?.name ||
+                            "Not Assigned"}
+                        </div>
+                        <div className="text-purple-100 text-xs">
+                          Class Teacher
+                        </div>
+                      </div>
+                    </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <Card className="text-center hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 mx-auto mb-3 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <CalendarOutlined className="text-2xl text-yellow-600" />
+                    <div className="bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <CalendarOutlined className="text-2xl" />
                       </div>
-                      <Statistic
-                        title="Admission Date"
-                        value={
-                          child.admissionDate
-                            ? new Date(child.admissionDate).toLocaleDateString()
-                            : "N/A"
-                        }
-                        valueStyle={{ fontSize: "14px" }}
-                      />
-                    </Card>
+                      <div className="text-center">
+                        <div className="text-sm font-bold mb-1">
+                          {child.admissionDate
+                            ? new Date(child.admissionDate).toLocaleDateString(
+                                "en-US",
+                                { month: "short", year: "numeric" },
+                              )
+                            : "N/A"}
+                        </div>
+                        <div className="text-amber-100 text-xs">
+                          Admission Date
+                        </div>
+                      </div>
+                    </div>
                   </Col>
                 </Row>
 
                 {/* Timetable */}
                 <Card
-                  className="mb-6"
+                  className="mb-6 shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0"
                   title={
-                    <span className="flex items-center gap-2">
-                      <ClockCircleOutlined className="text-indigo-600" />
-                      Timetable
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <ClockCircleOutlined className="text-indigo-600" />
+                      </div>
+                      <span className="font-bold">Timetable</span>
+                    </div>
+                  }
+                  extra={
+                    <div className="flex items-center gap-3">
+                      <Link to={`/parent/children/${child._id}`}>
+                        View Profile
+                      </Link>
+                      <Link to={`/parent/child-schedule?child=${child._id}`}>
+                        View Full Schedule
+                      </Link>
+                    </div>
                   }>
                   <ScheduleTimetable
                     groupedByDay={childScheduleData.groupedByDay}
@@ -374,16 +412,18 @@ const ParentDashboard = () => {
                           />
                           <div>
                             <h4 className="font-semibold text-lg">
-                              {child.classId.classTeacher.name}
+                              {child.classId.classTeacher.userId?.name ||
+                                "Not Assigned"}
                             </h4>
                             <div className="text-gray-500 text-sm flex items-center gap-1">
                               <MailOutlined />
-                              {child.classId.classTeacher.email}
+                              {child.classId.classTeacher.userId?.email ||
+                                "N/A"}
                             </div>
-                            {child.classId.classTeacher.phone && (
+                            {child.classId.classTeacher.userId?.phone && (
                               <div className="text-gray-500 text-sm flex items-center gap-1">
                                 <PhoneOutlined />
-                                {child.classId.classTeacher.phone}
+                                {child.classId.classTeacher.userId?.phone}
                               </div>
                             )}
                           </div>
@@ -409,6 +449,12 @@ const ParentDashboard = () => {
                       className="h-full">
                       <List size="small">
                         <List.Item>
+                          <span className="text-gray-500">Name:</span>
+                          <span className="font-medium">
+                            {child.userId?.name || "N/A"}
+                          </span>
+                        </List.Item>
+                        <List.Item>
                           <span className="text-gray-500">Email:</span>
                           <span className="font-medium">
                             {child.userId?.email || "N/A"}
@@ -425,9 +471,27 @@ const ParentDashboard = () => {
                           <span className="font-medium">{child.section}</span>
                         </List.Item>
                         <List.Item>
+                          <span className="text-gray-500">Admission No:</span>
+                          <span className="font-medium">
+                            {child.admissionNumber || "N/A"}
+                          </span>
+                        </List.Item>
+                        <List.Item>
                           <span className="text-gray-500">Academic Year:</span>
                           <span className="font-medium">
                             {child.academicYear}
+                          </span>
+                        </List.Item>
+                        <List.Item>
+                          <span className="text-gray-500">Status:</span>
+                          <span className="font-medium">
+                            {child.enrollmentStatus || "active"}
+                          </span>
+                        </List.Item>
+                        <List.Item>
+                          <span className="text-gray-500">Blood Group:</span>
+                          <span className="font-medium">
+                            {child.bloodGroup || "N/A"}
                           </span>
                         </List.Item>
                       </List>
@@ -490,7 +554,7 @@ const ParentDashboard = () => {
                     <Card
                       title={
                         <span className="flex items-center gap-2">
-                          <BookOutlined className="text-blue-600" />
+                          <BookOutlined className="text-blue-400" />
                           Class Subjects
                         </span>
                       }>
@@ -518,14 +582,27 @@ const ParentDashboard = () => {
       </Card>
 
       {/* Quick Actions */}
-      <Card title="Quick Actions">
+      <Card
+        title={
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <CalendarOutlined className="text-xl text-indigo-600" />
+            </div>
+            <span className="font-bold text-lg">Quick Actions</span>
+          </div>
+        }
+        className="shadow-md hover:shadow-lg transition-shadow rounded-2xl border-0">
         <Row gutter={[16, 16]}>
           <Col xs={12} sm={6}>
             <Link to="/parent/attendance">
-              <div className="p-4 bg-green-50 rounded-xl text-center hover:bg-green-100 transition-all hover:shadow-md cursor-pointer">
-                <CheckCircleOutlined className="text-3xl text-green-600 mb-2" />
-                <div className="font-medium text-gray-900">View Attendance</div>
-                <div className="text-xs text-gray-500">
+              <div className="group p-6 bg-linear-to-br from-green-50 to-green-100 rounded-2xl text-center hover:from-green-100 hover:to-green-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                <div className="w-14 h-14 mx-auto mb-4 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <CheckCircleOutlined className="text-2xl text-white" />
+                </div>
+                <div className="font-bold text-slate-800 mb-1">
+                  View Attendance
+                </div>
+                <div className="text-xs text-slate-600">
                   Check attendance records
                 </div>
               </div>
@@ -533,10 +610,12 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/children">
-              <div className="p-4 bg-purple-50 rounded-xl text-center hover:bg-purple-100 transition-all hover:shadow-md cursor-pointer">
-                <TeamOutlined className="text-3xl text-purple-600 mb-2" />
-                <div className="font-medium text-gray-900">My Children</div>
-                <div className="text-xs text-gray-500">
+              <div className="group p-6 bg-linear-to-br from-purple-50 to-purple-100 rounded-2xl text-center hover:from-purple-100 hover:to-purple-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                <div className="w-14 h-14 mx-auto mb-4 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <TeamOutlined className="text-2xl text-white" />
+                </div>
+                <div className="font-bold text-slate-800 mb-1">My Children</div>
+                <div className="text-xs text-slate-600">
                   View all children details
                 </div>
               </div>
@@ -544,10 +623,12 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/performance/grades">
-              <div className="p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-all hover:shadow-md cursor-pointer">
-                <TrophyOutlined className="text-3xl text-blue-600 mb-2" />
-                <div className="font-medium text-gray-900">Grades</div>
-                <div className="text-xs text-gray-500">
+              <div className="group p-6 bg-linear-to-br from-blue-50 to-blue-100 rounded-2xl text-center hover:from-blue-100 hover:to-blue-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                <div className="w-14 h-14 mx-auto mb-4 bg-blue-400 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <TrophyOutlined className="text-2xl text-white" />
+                </div>
+                <div className="font-bold text-slate-800 mb-1">Grades</div>
+                <div className="text-xs text-slate-600">
                   View academic performance
                 </div>
               </div>
@@ -555,10 +636,12 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/fees/status">
-              <div className="p-4 bg-yellow-50 rounded-xl text-center hover:bg-yellow-100 transition-all hover:shadow-md cursor-pointer">
-                <CalendarOutlined className="text-3xl text-yellow-600 mb-2" />
-                <div className="font-medium text-gray-900">Fee Status</div>
-                <div className="text-xs text-gray-500">
+              <div className="group p-6 bg-linear-to-br from-amber-50 to-amber-100 rounded-2xl text-center hover:from-amber-100 hover:to-amber-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                <div className="w-14 h-14 mx-auto mb-4 bg-amber-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <CalendarOutlined className="text-2xl text-white" />
+                </div>
+                <div className="font-bold text-slate-800 mb-1">Fee Status</div>
+                <div className="text-xs text-slate-600">
                   Check payment status
                 </div>
               </div>

@@ -203,7 +203,7 @@ const SchedulesPage = () => {
   // Stat Card Component
   const StatCard = ({ icon: Icon, label, value, color }) => {
     const colorClasses = {
-      blue: "bg-blue-50 text-blue-600",
+      blue: "bg-blue-50 text-blue-400",
       emerald: "bg-emerald-50 text-emerald-600",
       violet: "bg-violet-50 text-violet-600",
       amber: "bg-amber-50 text-amber-600",

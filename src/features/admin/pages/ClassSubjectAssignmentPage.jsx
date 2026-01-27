@@ -356,7 +356,7 @@ const ClassSubjectAssignmentPage = () => {
                   <Avatar
                     size="large"
                     icon={<UserOutlined />}
-                    className="bg-blue-100 text-blue-600"
+                    className="bg-blue-100 text-blue-400"
                   />
                   <div className="flex-1">
                     <div className="font-medium">
@@ -425,7 +425,7 @@ const ClassSubjectAssignmentPage = () => {
           <Card size="small">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <BookOutlined className="text-blue-600 text-lg" />
+                <BookOutlined className="text-blue-400 text-lg" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{subjects.length}</div>
