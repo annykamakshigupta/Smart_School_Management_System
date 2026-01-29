@@ -24,12 +24,12 @@ export const markAttendance = async (attendanceData) => {
     const response = await axios.post(
       `${API_URL}/mark`,
       attendanceData,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error marking attendance"
+      error.response?.data?.message || "Error marking attendance",
     );
   }
 };
@@ -45,12 +45,12 @@ export const updateAttendance = async (attendanceId, updateData) => {
     const response = await axios.put(
       `${API_URL}/${attendanceId}`,
       updateData,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error updating attendance"
+      error.response?.data?.message || "Error updating attendance",
     );
   }
 };
@@ -64,12 +64,12 @@ export const deleteAttendance = async (attendanceId) => {
   try {
     const response = await axios.delete(
       `${API_URL}/${attendanceId}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error deleting attendance"
+      error.response?.data?.message || "Error deleting attendance",
     );
   }
 };
@@ -90,12 +90,12 @@ export const getAttendanceByClass = async (params) => {
 
     const response = await axios.get(
       `${API_URL}/class?${queryParams.toString()}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching attendance"
+      error.response?.data?.message || "Error fetching attendance",
     );
   }
 };
@@ -114,7 +114,7 @@ export const getStudentsForAttendance = async (params) => {
 
     const response = await axios.get(
       `${API_URL}/students?${queryParams.toString()}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
@@ -137,12 +137,12 @@ export const getAttendanceByStudent = async (params = {}) => {
 
     const response = await axios.get(
       `${API_URL}/student?${queryParams.toString()}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching student attendance"
+      error.response?.data?.message || "Error fetching student attendance",
     );
   }
 };
@@ -155,19 +155,21 @@ export const getAttendanceByStudent = async (params = {}) => {
 export const getAttendanceForChild = async (params) => {
   try {
     const queryParams = new URLSearchParams();
-    if (params.childId) queryParams.append("childId", params.childId);
+    // Backend supports parent access via /attendance/student with studentId
+    const studentId = params?.studentId || params?.childId;
+    if (studentId) queryParams.append("studentId", studentId);
     if (params.startDate) queryParams.append("startDate", params.startDate);
     if (params.endDate) queryParams.append("endDate", params.endDate);
     if (params.subjectId) queryParams.append("subjectId", params.subjectId);
 
     const response = await axios.get(
-      `${API_URL}/child?${queryParams.toString()}`,
-      getAuthHeaders()
+      `${API_URL}/student?${queryParams.toString()}`,
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching child attendance"
+      error.response?.data?.message || "Error fetching child attendance",
     );
   }
 };
@@ -188,12 +190,12 @@ export const getAttendanceSummary = async (params = {}) => {
 
     const response = await axios.get(
       `${API_URL}/summary?${queryParams.toString()}`,
-      getAuthHeaders()
+      getAuthHeaders(),
     );
     return response.data;
   } catch (error) {
     throw new Error(
-      error.response?.data?.message || "Error fetching attendance summary"
+      error.response?.data?.message || "Error fetching attendance summary",
     );
   }
 };

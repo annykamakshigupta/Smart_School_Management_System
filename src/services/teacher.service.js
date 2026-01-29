@@ -36,12 +36,74 @@ const getTeacherProfileId = () => {
  */
 export const getMyAssignments = async () => {
   try {
-    const teacherId = getTeacherProfileId();
     const response = await axios.get(
-      `${API_URL}/admin/teachers/${teacherId}/assignments`,
+      `${API_URL}/teachers/me/assignments`,
       getAuthHeaders(),
     );
-    return response.data;
+    const payload = response.data;
+    const raw = payload?.data;
+
+    // Some pages (Mark/Manage Attendance) want a flat list:
+    // [{ classId: <Class|id>, subjectId?: <Subject|id> }]
+    // But other pages (TeacherDashboard) expect the original object payload.
+    let items = [];
+    if (Array.isArray(raw)) {
+      items = raw;
+    } else {
+      // Prefer explicit schedule-derived pairs from backend when available
+      if (Array.isArray(raw?.assignedSubjectPairs)) {
+        items.push(
+          ...raw.assignedSubjectPairs.map((pair) => ({
+            classId: pair?.classId || null,
+            subjectId: pair?.subjectId || null,
+          })),
+        );
+      }
+
+      // Fallback: subjects may include classId
+      if (Array.isArray(raw?.assignedSubjects)) {
+        items.push(
+          ...raw.assignedSubjects.map((subject) => ({
+            classId: subject?.classId || null,
+            subjectId: subject,
+          })),
+        );
+      }
+
+      // Include pure class assignments (no subject) so class teachers can at least select the class
+      if (Array.isArray(raw?.assignedClasses)) {
+        items.push(
+          ...raw.assignedClasses.map((cls) => ({
+            classId: cls,
+            subjectId: null,
+          })),
+        );
+      }
+
+      if (Array.isArray(raw?.classTeacherOf)) {
+        items.push(
+          ...raw.classTeacherOf.map((cls) => ({
+            classId: cls,
+            subjectId: null,
+          })),
+        );
+      }
+    }
+
+    // De-dupe by class+subject
+    const deduped = [
+      ...new Map(
+        items
+          .filter((x) => x?.classId)
+          .map((x) => {
+            const classKey = x.classId?._id || x.classId;
+            const subjectKey = x.subjectId?._id || x.subjectId || "";
+            return [`${classKey}::${subjectKey}`, x];
+          }),
+      ).values(),
+    ];
+
+    return { ...payload, items: deduped };
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Error fetching assignments",
@@ -54,8 +116,9 @@ export const getMyAssignments = async () => {
  */
 export const getStudentsByClass = async (classId) => {
   try {
+    // Teacher-safe endpoint (admin-only route would 403 for teachers)
     const response = await axios.get(
-      `${API_URL}/admin/students/class/${classId}`,
+      `${API_URL}/attendance/students?classId=${classId}`,
       getAuthHeaders(),
     );
     return response.data;

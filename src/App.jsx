@@ -42,6 +42,7 @@ import {
 import {
   TeacherDashboard,
   AttendancePage as TeacherAttendancePage,
+  MarkAttendancePage,
   MyStudentsPage,
   MySchedulePage,
   TeacherAssignmentsPage,
@@ -53,6 +54,7 @@ import {
   StudentAttendancePage,
   TimetablePage,
   StudentAssignmentsPage,
+  StudentClassesPage,
 } from "./features/student";
 
 // Assignment Detail Pages
@@ -221,6 +223,10 @@ function App() {
                     path="/teacher/attendance"
                     element={<TeacherAttendancePage />}
                   />
+                  <Route
+                    path="/teacher/attendance/mark"
+                    element={<MarkAttendancePage />}
+                  />
                   {/* Grades */}
                   <Route
                     path="/teacher/assignments"
@@ -305,6 +311,10 @@ function App() {
                   <Route
                     path="/student/timetable"
                     element={<TimetablePage />}
+                  />
+                  <Route
+                    path="/student/classes"
+                    element={<StudentClassesPage />}
                   />
                   <Route
                     path="/student/fees"

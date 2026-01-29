@@ -2,6 +2,7 @@
  * Sidebar Component
  * Modern, responsive sidebar with role-based navigation
  * Features: Collapsible, mobile-friendly, smooth animations
+ * Design: Clean, minimal with solid colors only
  */
 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -14,8 +15,6 @@ import {
   Settings,
   ClipboardCheck,
   FileText,
-  TrendingUp,
-  MessageSquare,
   Calendar,
   Award,
   UserCircle,
@@ -25,6 +24,10 @@ import {
   Book,
   UserPlus,
   Link2,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Eye,
 } from "lucide-react";
 
 /**
@@ -33,7 +36,7 @@ import {
 const NAVIGATION_CONFIG = {
   admin: [
     {
-      section: "Overview",
+      section: "Main",
       items: [
         {
           key: "dashboard",
@@ -137,7 +140,7 @@ const NAVIGATION_CONFIG = {
   ],
   teacher: [
     {
-      section: "Overview",
+      section: "Main",
       items: [
         {
           key: "dashboard",
@@ -153,14 +156,14 @@ const NAVIGATION_CONFIG = {
         {
           key: "mark-attendance",
           label: "Mark Attendance",
-          path: "/teacher/attendance?mark=1",
-          icon: ClipboardCheck,
+          path: "/teacher/attendance/mark",
+          icon: Pencil,
         },
         {
           key: "view-attendance",
           label: "View Records",
           path: "/teacher/attendance",
-          icon: FileText,
+          icon: Eye,
         },
       ],
     },
@@ -168,16 +171,22 @@ const NAVIGATION_CONFIG = {
       section: "Academics",
       items: [
         {
+          key: "classes",
+          label: "My Classes",
+          path: "/teacher/classes",
+          icon: BookOpen,
+        },
+        {
+          key: "students",
+          label: "My Students",
+          path: "/teacher/students",
+          icon: Users,
+        },
+        {
           key: "assignments",
           label: "Assignments",
           path: "/teacher/assignments",
           icon: FileText,
-        },
-        {
-          key: "performance",
-          label: "Performance",
-          path: "/teacher/performance",
-          icon: TrendingUp,
         },
         {
           key: "schedule",
@@ -187,21 +196,10 @@ const NAVIGATION_CONFIG = {
         },
       ],
     },
-    {
-      section: "Communication",
-      items: [
-        {
-          key: "messages",
-          label: "Messages",
-          path: "/teacher/messages",
-          icon: MessageSquare,
-        },
-      ],
-    },
   ],
   student: [
     {
-      section: "Overview",
+      section: "Main",
       items: [
         {
           key: "dashboard",
@@ -222,9 +220,15 @@ const NAVIGATION_CONFIG = {
         },
         {
           key: "attendance",
-          label: "Attendance",
+          label: "My Attendance",
           path: "/student/attendance",
           icon: ClipboardCheck,
+        },
+        {
+          key: "assignments",
+          label: "Assignments",
+          path: "/student/assignments",
+          icon: FileText,
         },
         {
           key: "results",
@@ -241,20 +245,20 @@ const NAVIGATION_CONFIG = {
       ],
     },
     {
-      section: "Assignments",
+      section: "Finance",
       items: [
         {
-          key: "assignments",
-          label: "Assignments",
-          path: "/student/assignments",
-          icon: FileText,
+          key: "fees",
+          label: "Fee Status",
+          path: "/student/fees",
+          icon: CreditCard,
         },
       ],
     },
   ],
   parent: [
     {
-      section: "Overview",
+      section: "Main",
       items: [
         {
           key: "dashboard",
@@ -268,16 +272,22 @@ const NAVIGATION_CONFIG = {
       section: "Children",
       items: [
         {
-          key: "child",
+          key: "children",
           label: "My Children",
           path: "/parent/children",
-          icon: UserCircle,
+          icon: Users,
         },
         {
           key: "attendance",
           label: "Attendance",
           path: "/parent/attendance",
           icon: ClipboardCheck,
+        },
+        {
+          key: "schedule",
+          label: "Schedule",
+          path: "/parent/child-schedule",
+          icon: Calendar,
         },
         {
           key: "results",
@@ -293,19 +303,8 @@ const NAVIGATION_CONFIG = {
         {
           key: "fees",
           label: "Fee Payments",
-          path: "/parent/fees",
+          path: "/parent/fees/status",
           icon: CreditCard,
-        },
-      ],
-    },
-    {
-      section: "Communication",
-      items: [
-        {
-          key: "messages",
-          label: "Messages",
-          path: "/parent/messages",
-          icon: MessageSquare,
         },
       ],
     },
@@ -313,32 +312,44 @@ const NAVIGATION_CONFIG = {
 };
 
 /**
- * Role Theme Configuration
+ * Role Theme Configuration - Solid colors only
  */
 const ROLE_THEMES = {
   admin: {
-    primary: "#dc2626",
-    gradient: "from-red-600 to-red-700",
-    light: "bg-red-50",
-    text: "text-red-600",
+    primary: "bg-slate-900",
+    primaryHover: "hover:bg-slate-800",
+    accent: "bg-slate-800",
+    accentText: "text-slate-900",
+    lightBg: "bg-slate-100",
+    lightText: "text-slate-700",
+    border: "border-slate-200",
   },
   teacher: {
-    primary: "#2563eb",
-    gradient: "from-blue-400 to-blue-700",
-    light: "bg-blue-50",
-    text: "text-blue-400",
+    primary: "bg-blue-600",
+    primaryHover: "hover:bg-blue-700",
+    accent: "bg-blue-600",
+    accentText: "text-blue-600",
+    lightBg: "bg-blue-50",
+    lightText: "text-blue-700",
+    border: "border-blue-200",
   },
   student: {
-    primary: "#059669",
-    gradient: "from-emerald-600 to-emerald-700",
-    light: "bg-emerald-50",
-    text: "text-emerald-600",
+    primary: "bg-emerald-600",
+    primaryHover: "hover:bg-emerald-700",
+    accent: "bg-emerald-600",
+    accentText: "text-emerald-600",
+    lightBg: "bg-emerald-50",
+    lightText: "text-emerald-700",
+    border: "border-emerald-200",
   },
   parent: {
-    primary: "#7c3aed",
-    gradient: "from-violet-600 to-violet-700",
-    light: "bg-violet-50",
-    text: "text-violet-600",
+    primary: "bg-violet-600",
+    primaryHover: "hover:bg-violet-700",
+    accent: "bg-violet-600",
+    accentText: "text-violet-600",
+    lightBg: "bg-violet-50",
+    lightText: "text-violet-700",
+    border: "border-violet-200",
   },
 };
 
@@ -348,8 +359,8 @@ const ROLE_THEMES = {
 const NavItem = ({ item, collapsed, theme, onNavigate }) => {
   const location = useLocation();
   const Icon = item.icon;
-  const isActive =
-    location.pathname === item.path ||
+  
+  const isActive = location.pathname === item.path || 
     (item.path.includes("?") && location.pathname === item.path.split("?")[0]);
 
   return (
@@ -359,35 +370,32 @@ const NavItem = ({ item, collapsed, theme, onNavigate }) => {
       className="group relative block">
       <div
         className={`
-          flex items-center gap-3 px-3 py-2.5 rounded-xl
-          transition-all duration-200 ease-out
+          flex items-center gap-3 px-3 py-2.5 rounded-lg
+          transition-all duration-200
           ${
             isActive
-              ? `${theme.light} ${theme.text} shadow-sm`
-              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              ? `${theme.lightBg} ${theme.lightText} font-medium`
+              : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
           }
           ${collapsed ? "justify-center" : ""}
         `}>
         {/* Active Indicator */}
         {isActive && (
           <div
-            className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-linear-to-b ${theme.gradient}`}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full ${theme.accent}`}
           />
         )}
 
         {/* Icon */}
         <Icon
           size={20}
-          strokeWidth={2}
-          className={`shrink-0 transition-transform duration-200 ${
-            !isActive && "group-hover:scale-110"
-          }`}
+          strokeWidth={1.75}
+          className="shrink-0"
         />
 
         {/* Label */}
         {!collapsed && (
-          <span
-            className={`text-sm font-medium truncate ${isActive ? "font-semibold" : ""}`}>
+          <span className="text-sm truncate">
             {item.label}
           </span>
         )}
@@ -397,15 +405,15 @@ const NavItem = ({ item, collapsed, theme, onNavigate }) => {
       {collapsed && (
         <div
           className="
-          absolute left-full ml-3 px-3 py-2 
-          bg-gray-900 text-white text-sm font-medium 
-          rounded-lg shadow-xl 
-          opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-          transition-all duration-200 whitespace-nowrap z-50 
-          pointer-events-none
-        ">
+            absolute left-full ml-3 px-3 py-2 
+            bg-slate-900 text-white text-sm font-medium 
+            rounded-lg shadow-lg 
+            opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+            transition-all duration-200 whitespace-nowrap z-50 
+            pointer-events-none
+          ">
           {item.label}
-          <div className="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-gray-900" />
+          <div className="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-slate-900" />
         </div>
       )}
     </NavLink>
@@ -420,7 +428,7 @@ const NavSection = ({ section, collapsed, theme, onNavigate }) => {
     <div className="space-y-1">
       {/* Section Header */}
       {!collapsed && section.section && (
-        <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        <div className="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
           {section.section}
         </div>
       )}
@@ -444,7 +452,7 @@ const NavSection = ({ section, collapsed, theme, onNavigate }) => {
 /**
  * Main Sidebar Component
  */
-const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
+const Sidebar = ({ collapsed, mobileOpen, onClose, onToggle, userRole = "admin" }) => {
   const navigation = NAVIGATION_CONFIG[userRole] || NAVIGATION_CONFIG.admin;
   const theme = ROLE_THEMES[userRole] || ROLE_THEMES.admin;
   const navigate = useNavigate();
@@ -455,7 +463,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       admin: "/admin/academics/timetable",
       teacher: "/teacher/schedule",
       student: "/student/timetable",
-      parent: "/parent/timetable",
+      parent: "/parent/child-schedule",
     };
     return routes[userRole] || "/";
   };
@@ -471,40 +479,61 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       <aside
         className={`
           hidden lg:flex flex-col fixed top-0 left-0 h-full
-          bg-white border-r border-gray-200
+          bg-white border-r border-slate-200
           transition-all duration-300 ease-out z-40
           ${collapsed ? "w-20" : "w-64"}
         `}>
         {/* Logo Section */}
         <div
           className={`
-            flex items-center h-16 px-4 border-b border-gray-200
-            ${collapsed ? "justify-center px-0" : "gap-3"}
+            flex items-center h-16 px-4 border-b border-slate-200
+            ${collapsed ? "justify-center px-2" : "justify-between"}
           `}>
-          <div
-            className={`
-              flex items-center justify-center shrink-0 w-10 h-10 
-              rounded-xl shadow-md
-              bg-linear-to-br ${theme.gradient}
-              transition-transform duration-300 hover:scale-105
-            `}>
-            <GraduationCap size={22} strokeWidth={2.5} className="text-white" />
+          <div className={`flex items-center ${collapsed ? "" : "gap-3"}`}>
+            <div
+              className={`
+                flex items-center justify-center shrink-0 w-10 h-10 
+                rounded-xl ${theme.primary}
+                transition-transform duration-300
+              `}>
+              <GraduationCap size={22} strokeWidth={2} className="text-white" />
+            </div>
+
+            {!collapsed && (
+              <div className="overflow-hidden">
+                <div className="text-lg font-bold text-slate-900 tracking-tight">
+                  SSMS
+                </div>
+                <div className="text-xs text-slate-500">
+                  School Management
+                </div>
+              </div>
+            )}
           </div>
 
-          {!collapsed && (
-            <div className="overflow-hidden">
-              <div className="text-lg font-bold text-gray-900 tracking-tight">
-                SSMS
-              </div>
-              <div className="text-xs text-gray-500 font-medium">
-                School Management
-              </div>
-            </div>
+          {/* Collapse Toggle - Desktop */}
+          {!collapsed && onToggle && (
+            <button
+              onClick={onToggle}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              aria-label="Collapse sidebar">
+              <ChevronLeft size={18} />
+            </button>
           )}
         </div>
 
+        {/* Expand button when collapsed */}
+        {collapsed && onToggle && (
+          <button
+            onClick={onToggle}
+            className="mx-auto mt-3 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Expand sidebar">
+            <ChevronRight size={18} />
+          </button>
+        )}
+
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-300">
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6 scrollbar-thin scrollbar-thumb-slate-300">
           {navigation.map((section, index) => (
             <NavSection
               key={index}
@@ -521,24 +550,24 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
             onClick={handleScheduleClick}
             className={`
               w-full flex items-center justify-center gap-2 
-              px-4 py-3 rounded-xl font-semibold text-white 
-              shadow-lg hover:shadow-xl 
-              transition-all duration-300 hover:scale-[1.02] active:scale-95
-              bg-linear-to-r ${theme.gradient}
+              px-4 py-3 rounded-xl font-medium text-white 
+              shadow-sm hover:shadow-md
+              transition-all duration-200 active:scale-[0.98]
+              ${theme.primary} ${theme.primaryHover}
             `}
             title="View Schedule">
-            <Calendar size={20} strokeWidth={2.5} />
-            {!collapsed && <span>Schedule</span>}
+            <Calendar size={18} strokeWidth={2} />
+            {!collapsed && <span>View Schedule</span>}
           </button>
         </div>
 
         {/* Footer */}
         <div
           className={`
-            px-4 py-3 border-t border-gray-200
+            px-4 py-3 border-t border-slate-200
             ${collapsed ? "text-center px-2" : ""}
           `}>
-          <div className="text-xs text-gray-400 font-medium">
+          <div className="text-xs text-slate-400">
             {collapsed ? "©" : `© ${new Date().getFullYear()} SSMS`}
           </div>
         </div>
@@ -547,7 +576,7 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
+          className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={onClose}
         />
       )}
@@ -557,29 +586,24 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
         className={`
           lg:hidden fixed top-0 left-0 h-full w-72 bg-white z-50
           transform transition-transform duration-300 ease-out
-          shadow-2xl
+          shadow-xl
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
         `}>
         {/* Mobile Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
           <div className="flex items-center gap-3">
             <div
               className={`
                 flex items-center justify-center w-10 h-10 
-                rounded-xl shadow-md
-                bg-linear-to-br ${theme.gradient}
+                rounded-xl ${theme.primary}
               `}>
-              <GraduationCap
-                size={22}
-                strokeWidth={2.5}
-                className="text-white"
-              />
+              <GraduationCap size={22} strokeWidth={2} className="text-white" />
             </div>
             <div>
-              <div className="text-lg font-bold text-gray-900 tracking-tight">
+              <div className="text-lg font-bold text-slate-900 tracking-tight">
                 SSMS
               </div>
-              <div className="text-xs text-gray-500 font-medium">
+              <div className="text-xs text-slate-500">
                 School Management
               </div>
             </div>
@@ -587,14 +611,14 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200"
+            className="p-2 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all duration-200"
             aria-label="Close menu">
             <X size={20} strokeWidth={2} />
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-4">
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
           {navigation.map((section, index) => (
             <NavSection
               key={index}
@@ -612,18 +636,18 @@ const Sidebar = ({ collapsed, mobileOpen, onClose, userRole = "admin" }) => {
             onClick={handleScheduleClick}
             className={`
               w-full flex items-center justify-center gap-2 
-              px-4 py-3 rounded-xl font-semibold text-white 
-              shadow-lg transition-all duration-300 active:scale-95
-              bg-linear-to-r ${theme.gradient}
+              px-4 py-3 rounded-xl font-medium text-white 
+              transition-all duration-200 active:scale-[0.98]
+              ${theme.primary} ${theme.primaryHover}
             `}>
-            <Calendar size={20} strokeWidth={2.5} />
-            <span>Schedule</span>
+            <Calendar size={18} strokeWidth={2} />
+            <span>View Schedule</span>
           </button>
         </div>
 
         {/* Mobile Footer */}
-        <div className="px-4 py-3 border-t border-gray-200">
-          <div className="text-xs text-gray-400 font-medium">
+        <div className="px-4 py-3 border-t border-slate-200">
+          <div className="text-xs text-slate-400">
             © {new Date().getFullYear()} SSMS - Smart School System
           </div>
         </div>

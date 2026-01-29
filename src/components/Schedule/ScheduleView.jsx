@@ -375,7 +375,7 @@ const WeekViewColumn = ({
       </div>
 
       {/* Events List */}
-      <div className="p-3 space-y-2 min-h-[120px] bg-white">
+      <div className="p-3 space-y-2 min-h-30 bg-white">
         {items.length > 0 ? (
           items.map((item) => (
             <ScheduleEventCard

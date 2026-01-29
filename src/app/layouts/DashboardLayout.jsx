@@ -106,7 +106,7 @@ const DashboardLayout = () => {
         <Content
           className="
             p-4 md:p-6 lg:p-8
-            bg-linear-to-br from-gray-50 via-white to-gray-50
+            bg-slate-50
             min-h-[calc(100vh-64px)] 
             mt-16
           ">

@@ -1,5 +1,5 @@
 // Legacy exports (kept for backward compatibility)
-export { default as ScheduleTimetable } from "./ScheduleTimetable";
+
 export { default as ScheduleCard } from "./ScheduleCard";
 
 // Modern Schedule Components

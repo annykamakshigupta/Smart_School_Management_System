@@ -35,13 +35,13 @@ import {
   IdcardOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { StatCard, PageHeader } from "../../../components/UI";
+
 import {
   getMyChildren,
   getChildAttendance,
 } from "../../../services/parent.service";
 import scheduleService from "../../../services/schedule.service";
-import { ScheduleTimetable } from "../../../components/Schedule";
+import { ScheduleView } from "../../../components/Schedule";
 
 const ParentDashboard = () => {
   const EMPTY_GROUPED = {
@@ -150,7 +150,7 @@ const ParentDashboard = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+        <div className="bg-indigo-600 rounded-2xl p-8 text-white shadow-xl">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold mb-2">Parent Dashboard 👨‍👩‍👧‍👦</h1>
@@ -173,7 +173,7 @@ const ParentDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white shadow-xl">
+      <div className="bg-indigo-600 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">Parent Dashboard 👨‍👩‍👧‍👦</h1>
@@ -242,7 +242,7 @@ const ParentDashboard = () => {
             children: (
               <div>
                 {/* Child Profile Card */}
-                <div className="bg-linear-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white mb-6">
+                <div className="bg-indigo-600 rounded-xl p-6 text-white mb-6">
                   <div className="flex items-start gap-6">
                     <Avatar
                       size={80}
@@ -299,7 +299,7 @@ const ParentDashboard = () => {
                 {/* Stats Row */}
                 <Row gutter={[16, 16]} className="mb-6">
                   <Col xs={12} md={6}>
-                    <div className="bg-linear-to-br from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-green-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                       <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                         <CheckCircleOutlined className="text-2xl" />
                       </div>
@@ -312,7 +312,7 @@ const ParentDashboard = () => {
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <div className="bg-linear-to-br from-blue-500 to-blue-400 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-blue-500 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                       <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                         <BookOutlined className="text-2xl" />
                       </div>
@@ -325,7 +325,7 @@ const ParentDashboard = () => {
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-purple-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                       <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                         <TeamOutlined className="text-2xl" />
                       </div>
@@ -341,7 +341,7 @@ const ParentDashboard = () => {
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
-                    <div className="bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="bg-amber-600 rounded-2xl p-5 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                       <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                         <CalendarOutlined className="text-2xl" />
                       </div>
@@ -383,7 +383,7 @@ const ParentDashboard = () => {
                       </Link>
                     </div>
                   }>
-                  <ScheduleTimetable
+                  <ScheduleView
                     groupedByDay={childScheduleData.groupedByDay}
                     showTeacher={true}
                     showClass={false}
@@ -595,7 +595,7 @@ const ParentDashboard = () => {
         <Row gutter={[16, 16]}>
           <Col xs={12} sm={6}>
             <Link to="/parent/attendance">
-              <div className="group p-6 bg-linear-to-br from-green-50 to-green-100 rounded-2xl text-center hover:from-green-100 hover:to-green-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+              <div className="group p-6 bg-green-50 rounded-2xl text-center hover:bg-green-100 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
                 <div className="w-14 h-14 mx-auto mb-4 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <CheckCircleOutlined className="text-2xl text-white" />
                 </div>
@@ -610,7 +610,7 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/children">
-              <div className="group p-6 bg-linear-to-br from-purple-50 to-purple-100 rounded-2xl text-center hover:from-purple-100 hover:to-purple-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+              <div className="group p-6 bg-purple-50 rounded-2xl text-center hover:bg-purple-100 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
                 <div className="w-14 h-14 mx-auto mb-4 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <TeamOutlined className="text-2xl text-white" />
                 </div>
@@ -623,8 +623,8 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/performance/grades">
-              <div className="group p-6 bg-linear-to-br from-blue-50 to-blue-100 rounded-2xl text-center hover:from-blue-100 hover:to-blue-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
-                <div className="w-14 h-14 mx-auto mb-4 bg-blue-400 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="group p-6 bg-blue-50 rounded-2xl text-center hover:bg-blue-100 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+                <div className="w-14 h-14 mx-auto mb-4 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <TrophyOutlined className="text-2xl text-white" />
                 </div>
                 <div className="font-bold text-slate-800 mb-1">Grades</div>
@@ -636,7 +636,7 @@ const ParentDashboard = () => {
           </Col>
           <Col xs={12} sm={6}>
             <Link to="/parent/fees/status">
-              <div className="group p-6 bg-linear-to-br from-amber-50 to-amber-100 rounded-2xl text-center hover:from-amber-100 hover:to-amber-200 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
+              <div className="group p-6 bg-amber-50 rounded-2xl text-center hover:bg-amber-100 transition-all cursor-pointer shadow-sm hover:shadow-md transform hover:-translate-y-1 duration-200">
                 <div className="w-14 h-14 mx-auto mb-4 bg-amber-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <CalendarOutlined className="text-2xl text-white" />
                 </div>
